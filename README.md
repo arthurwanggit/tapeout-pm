@@ -20,8 +20,6 @@
 
 网页版：打开 `dist/index.html`，或把整个目录放到任意静态托管上。不需要服务器，也不需要联网。
 
-小红书小工具：上传 `release/liupian-pm-minitool.zip`，在创服平台模拟器、Android 真机和 iOS 真机完成验证。
-
 ## 怎么玩
 
 1. 给项目起名，然后为 6 个方向各选一个团队。同名会复现同一局。
@@ -38,13 +36,12 @@
 - 背调线索、团队隐藏特质、人员流动和资金链风险
 - 6 个 Signoff 违规项，可以修，也可以带着风险 Waive
 - 8 个结局，包含资金链断裂
-- 结局可生成 3:4 分享卡，并保存到相册或发布到小红书
+- 结局可生成 3:4 分享卡
 
 ## 版本
 
 - 当前版本：`0.2.0`
 - 版本记录：[`versions/`](versions/)
-- 小工具包：[`release/liupian-pm-minitool.zip`](release/liupian-pm-minitool.zip)
 
 ## 说明
 
