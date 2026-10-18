@@ -1,0 +1,6723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f2e7">
+  <title>流片吧，PM · 一维空间</title>
+  <style>
+:root {
+  --bg: #f7f2e7;
+  --panel: #fffdf9;
+  --panel2: #f3ecdf;
+  --line: #d9cebb;
+  --text: #20262e;
+  --muted: #6b7069;
+  --accent: #9a6a00;
+  --accent-ink: #fffdf9;
+  --green: #2e7d3e;
+  --red: #bd3b32;
+  --blue: #1f6feb;
+  --radius: 14px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(900px 500px at 50% -180px, rgba(240, 180, 41, 0.2), transparent 70%),
+    linear-gradient(180deg, #fbf7ee 0%, #f4ede0 58%, #eee5d6 100%);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body::before {
+  content: "一维空间";
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  z-index: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  font-size: 110px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: rgba(92, 67, 15, 0.022);
+  transform: rotate(-18deg);
+}
+
+@media (min-width: 560px) {
+  body::before {
+    font-size: 170px;
+  }
+}
+
+@media (min-width: 900px) {
+  body::before {
+    font-size: 230px;
+  }
+}
+
+#app {
+  position: relative;
+  z-index: 1;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.wrap {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 18px 16px 120px;
+}
+
+.title-screen {
+  padding-top: 54px;
+}
+
+.brand-mark {
+  display: inline-block;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  border: 1px solid rgba(240, 180, 41, 0.45);
+  border-radius: 999px;
+  padding: 4px 10px;
+  margin-bottom: 18px;
+}
+
+h1 {
+  font-size: 46px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin: 0 0 14px;
+}
+
+.lead {
+  color: var(--muted);
+  font-size: 16px;
+  margin: 0 0 26px;
+  max-width: 440px;
+}
+
+.author {
+  color: #8a6515;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: -4px 0 16px;
+}
+
+.how-list {
+  margin: 10px 0 0;
+  padding-left: 20px;
+  color: #4b5563;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent), var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+
+.card.subtle {
+  background: rgba(255, 255, 255, 0.018);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.field-label {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #0e141b;
+  color: var(--text);
+  padding: 11px 14px;
+  outline: none;
+  margin-bottom: 12px;
+}
+
+.input:focus {
+  border-color: var(--accent);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 11px 16px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: var(--panel2);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 15px;
+  text-decoration: none;
+  transition: transform 0.08s ease, opacity 0.15s ease, border-color 0.15s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.btn.secondary {
+  background: var(--panel2);
+  border-color: var(--line);
+}
+
+.btn.ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.btn.danger {
+  background: rgba(248, 81, 73, 0.14);
+  border-color: rgba(248, 81, 73, 0.55);
+  color: #ffb4b0;
+}
+
+.btn.small {
+  min-height: 36px;
+  padding: 7px 12px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+
+.btn.block {
+  display: flex;
+  width: 100%;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fine {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 8px 0 0;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.warning {
+  color: #ffc46b;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+.danger-text {
+  color: var(--red);
+}
+
+.budget-crisis {
+  margin: 0 0 12px;
+  padding: 11px 13px;
+  border: 1px solid rgba(248, 81, 73, 0.42);
+  border-radius: 12px;
+  background: rgba(248, 81, 73, 0.09);
+}
+
+.budget-crisis-title {
+  color: #ffb1ad;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.budget-crisis-text {
+  color: #ffc46b;
+  font-size: 12px;
+  line-height: 1.55;
+  margin-top: 3px;
+}
+
+.budget-result {
+  border-color: rgba(248, 81, 73, 0.38);
+  background: linear-gradient(180deg, rgba(248, 81, 73, 0.07), transparent), var(--panel);
+}
+
+.budget-result .mini-title {
+  color: #ffb1ad;
+}
+
+.budget-result.danger {
+  border-color: rgba(248, 81, 73, 0.65);
+  background: rgba(248, 81, 73, 0.1);
+}
+
+.result {
+  color: #b9f0c2;
+  background: rgba(63, 185, 80, 0.08);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.kicker {
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.h2 {
+  font-size: 22px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  margin: 0;
+}
+
+.body {
+  font-size: 14px;
+  color: #cfd8e3;
+  margin: 8px 0 0;
+}
+
+.section-title {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 24px 0 10px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.row.between {
+  justify-content: space-between;
+}
+
+.center {
+  text-align: center;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 8px;
+  padding: 10px 0 12px;
+  padding-top: calc(10px + var(--safe-area-inset-top, 0px));
+  margin: -18px 0 16px;
+  background: linear-gradient(180deg, rgba(11, 15, 20, 0.98) 65%, rgba(11, 15, 20, 0));
+}
+
+.topbar-item {
+  min-width: 0;
+}
+
+.topbar-label {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.topbar-value {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topbar-value.mono {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+}
+
+.topbar-value.danger {
+  color: var(--red);
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 8px;
+  margin-top: 14px;
+}
+
+.stat {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 9px 10px;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.month-card {
+  margin-bottom: 18px;
+}
+
+.milestone-list {
+  margin-top: 12px;
+}
+
+.milestone {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-size: 13px;
+  padding: 7px 0;
+  border-top: 1px solid rgba(42, 53, 68, 0.65);
+}
+
+.milestone-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-top: 7px;
+  flex: 0 0 auto;
+  background: var(--green);
+}
+
+.milestone-dot.bad {
+  background: var(--red);
+}
+
+.direction-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 26px 0 10px;
+}
+
+.direction-name {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.direction-hint {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.candidate-list {
+  display: grid;
+  grid-gap: 12px;
+}
+
+.candidate.package,
+.candidate.team-card {
+  padding: 13px 14px;
+}
+
+.candidate.package .name,
+.candidate.team-card .name {
+  font-size: 17px;
+}
+
+.candidate.package .pitch,
+.candidate.team-card .pitch {
+  margin: 9px 0 6px;
+}
+
+.candidate.package .fine,
+.candidate.team-card .fine {
+  margin-top: 8px;
+}
+
+.candidate.team-card.blocked {
+  opacity: 0.45;
+}
+
+.mix-line {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  margin-top: 7px;
+}
+
+.gate-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 8px;
+  margin-top: 12px;
+}
+
+.gate-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.gate-value {
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.signoff-choice {
+  border-color: rgba(240, 180, 41, 0.42);
+  background: linear-gradient(180deg, rgba(240, 180, 41, 0.06), transparent), var(--panel);
+}
+
+.truth-team {
+  padding: 14px;
+}
+
+.truth-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 6px;
+  margin-top: 10px;
+}
+
+.truth-stat {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.truth-stat b {
+  display: block;
+  color: var(--text);
+  font-size: 14px;
+  margin-top: 1px;
+}
+
+.candidate {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.candidate.selected {
+  border-color: rgba(240, 180, 41, 0.75);
+  background: linear-gradient(180deg, rgba(240, 180, 41, 0.07), transparent), var(--panel);
+}
+
+.candidate-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.name {
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.role {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 1px;
+}
+
+.pitch {
+  font-size: 14px;
+  color: #dce5ef;
+  margin: 12px 0 6px;
+}
+
+.interview {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  color: #c6d3e1;
+  background: rgba(88, 166, 255, 0.1);
+  border: 1px solid rgba(88, 166, 255, 0.22);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.clue {
+  margin-top: 10px;
+  padding: 9px 11px;
+  border-radius: 10px;
+  border: 1px dashed rgba(240, 180, 41, 0.42);
+  background: rgba(240, 180, 41, 0.06);
+  color: #f5d58a;
+  font-size: 12px;
+}
+
+.sticky-bottom {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 560px;
+  padding: 24px 16px calc(14px + var(--safe-area-inset-bottom, 0px));
+  background: linear-gradient(180deg, transparent, var(--bg) 38%);
+  z-index: 30;
+}
+
+.sticky-bottom .hint {
+  margin-bottom: 8px;
+}
+
+.track-list {
+  display: grid;
+  grid-gap: 10px;
+}
+
+.track-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 13px 14px;
+}
+
+.track-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.track-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.track-goal {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.badge.ok {
+  color: #9be7a8;
+  background: rgba(63, 185, 80, 0.1);
+  border-color: rgba(63, 185, 80, 0.35);
+}
+
+.badge.bad {
+  color: #ffb1ad;
+  background: rgba(248, 81, 73, 0.1);
+  border-color: rgba(248, 81, 73, 0.35);
+}
+
+.progress {
+  height: 8px;
+  border-radius: 999px;
+  background: #0e141b;
+  border: 1px solid rgba(42, 53, 68, 0.8);
+  overflow: hidden;
+  margin-top: 11px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8a6515, var(--accent));
+  transition: width 0.35s ease;
+}
+
+.staff-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.staff-chip {
+  font-size: 11px;
+  color: #cfd8e3;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.empty-badge {
+  font-size: 11px;
+  color: #ffb1ad;
+  background: rgba(248, 81, 73, 0.08);
+  border: 1px solid rgba(248, 81, 73, 0.28);
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-gap: 10px;
+}
+
+.member {
+  text-align: left;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  color: var(--text);
+}
+
+.member.assigned {
+  border-color: rgba(240, 180, 41, 0.45);
+  background: linear-gradient(180deg, rgba(240, 180, 41, 0.055), transparent), var(--panel);
+}
+
+.member-name {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.member-role {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 1px;
+}
+
+.member-assign {
+  color: var(--accent);
+  font-size: 11px;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-top: 18px;
+}
+
+.mini-title {
+  font-size: 12px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.quote {
+  font-size: 14px;
+  color: #e9f0f7;
+  border-left: 3px solid var(--accent);
+  padding-left: 10px;
+  margin: 12px 0 8px;
+}
+
+.quote-speaker {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.detail {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.report-track {
+  padding: 15px;
+}
+
+.event-card {
+  border-color: rgba(240, 180, 41, 0.35);
+}
+
+.event-options {
+  display: grid;
+  grid-gap: 8px;
+  margin-top: 12px;
+}
+
+.event-options .btn {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.waiver-card {
+  transition: border-color 0.15s ease;
+}
+
+.waiver-card.fixed {
+  border-color: rgba(63, 185, 80, 0.55);
+}
+
+.waiver-card.waived {
+  border-color: rgba(248, 81, 73, 0.5);
+}
+
+.sheet-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.72);
+  animation: fade-in 0.14s ease-out;
+}
+
+.sheet {
+  width: 100%;
+  max-width: 560px;
+  max-height: 84vh;
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-radius: 20px 20px 0 0;
+  padding: 10px 16px calc(20px + var(--safe-area-inset-bottom, 0px));
+  animation: slide-up 0.18s ease-out;
+}
+
+.sheet-handle {
+  width: 42px;
+  height: 4px;
+  border-radius: 999px;
+  background: #384555;
+  margin: 2px auto 14px;
+}
+
+.sheet-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.assign-list,
+.action-list {
+  display: grid;
+  grid-gap: 8px;
+  margin-top: 12px;
+}
+
+.assign-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 13px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--text);
+  font-weight: 600;
+  text-align: left;
+}
+
+.assign-row span:last-child {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.assign-row.selected {
+  border-color: var(--accent);
+  background: rgba(240, 180, 41, 0.08);
+}
+
+.action-row {
+  width: 100%;
+  text-align: left;
+  padding: 12px 13px;
+  border-radius: 11px;
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--text);
+}
+
+.action-row:disabled {
+  opacity: 0.4;
+}
+
+.action-row .action-name {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.action-row .action-meta {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.result-hero {
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 22px 18px;
+  margin-bottom: 16px;
+  background:
+    radial-gradient(500px 240px at 100% 0%, rgba(240, 180, 41, 0.16), transparent 70%),
+    var(--panel);
+  position: relative;
+  overflow: hidden;
+}
+
+.result-hero.grade-S {
+  border-color: rgba(240, 180, 41, 0.65);
+}
+
+.result-hero.grade-D {
+  border-color: rgba(248, 81, 73, 0.55);
+  background:
+    radial-gradient(500px 240px at 100% 0%, rgba(248, 81, 73, 0.13), transparent 70%),
+    var(--panel);
+}
+
+.ending-title {
+  font-size: 36px;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  font-weight: 800;
+  margin: 10px 0 2px;
+}
+
+.ending-sub {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 14px;
+}
+
+.grade {
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 54px;
+  line-height: 1;
+  font-weight: 800;
+  color: var(--accent);
+  opacity: 0.85;
+}
+
+.result-hero.grade-D .grade {
+  color: var(--red);
+}
+
+.score {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.ending-body {
+  font-size: 14px;
+  color: #d8e2ed;
+  margin: 0;
+}
+
+.check-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 8px;
+  margin-bottom: 10px;
+}
+
+.check {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.check.ok {
+  border-color: rgba(63, 185, 80, 0.4);
+}
+
+.check.bad {
+  border-color: rgba(248, 81, 73, 0.4);
+}
+
+.check-label {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.check-value {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 3px;
+}
+
+.check.bad .check-value {
+  color: #ffb1ad;
+}
+
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 8px;
+  margin-bottom: 16px;
+}
+
+.metric {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.metric-label {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+.metric-value {
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.truth-table-wrap {
+  overflow-x: auto;
+  margin: 10px 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+th,
+td {
+  padding: 7px 9px;
+  border-bottom: 1px solid rgba(42, 53, 68, 0.72);
+  text-align: right;
+}
+
+th:first-child,
+td:first-child,
+th:nth-child(2),
+td:nth-child(2) {
+  text-align: left;
+}
+
+th {
+  color: var(--muted);
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.03);
+  position: sticky;
+  top: 0;
+}
+
+tr:last-child td {
+  border-bottom: 0;
+}
+
+.risk-high {
+  color: #ffb1ad;
+  font-weight: 700;
+}
+
+.risk-mid {
+  color: #ffc46b;
+}
+
+.risk-low {
+  color: var(--muted);
+}
+
+.log {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.log li {
+  margin-bottom: 5px;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 96px;
+  transform: translateX(-50%) translateY(8px);
+  z-index: 80;
+  max-width: calc(100% - 40px);
+  padding: 10px 14px;
+  border-radius: 11px;
+  background: #243040;
+  border: 1px solid #3a4a5e;
+  color: var(--text);
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.hidden {
+  display: none !important;
+}
+
+body.modal-open {
+  overflow: hidden;
+}
+
+.decision-banner {
+  border: 1px solid rgba(240, 180, 41, 0.55);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  background: linear-gradient(90deg, rgba(240, 180, 41, 0.16), rgba(240, 180, 41, 0.04));
+  box-shadow: 0 0 0 1px rgba(240, 180, 41, 0.12), 0 0 22px rgba(240, 180, 41, 0.08);
+  animation: decision-pulse 2.4s ease-in-out infinite;
+}
+
+.decision-banner.next {
+  border-color: rgba(88, 166, 255, 0.42);
+  background: linear-gradient(90deg, rgba(88, 166, 255, 0.12), rgba(88, 166, 255, 0.03));
+  box-shadow: none;
+  animation: none;
+}
+
+.decision-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  padding: 2px 8px;
+  margin-bottom: 6px;
+  border-radius: 999px;
+  color: var(--accent);
+  background: rgba(240, 180, 41, 0.12);
+  border: 1px solid rgba(240, 180, 41, 0.4);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.decision-banner.next .decision-pill {
+  color: var(--blue);
+  background: rgba(88, 166, 255, 0.1);
+  border-color: rgba(88, 166, 255, 0.35);
+}
+
+.decision-title {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.decision-text {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.decision-tag {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 700;
+  vertical-align: 2px;
+  white-space: nowrap;
+}
+
+.decision-tag.pending {
+  color: #ffc46b;
+  background: rgba(240, 180, 41, 0.1);
+  border: 1px solid rgba(240, 180, 41, 0.38);
+}
+
+.decision-tag.done {
+  color: #9be7a8;
+  background: rgba(63, 185, 80, 0.08);
+  border: 1px solid rgba(63, 185, 80, 0.3);
+}
+
+.attention {
+  border-color: rgba(240, 180, 41, 0.8) !important;
+  box-shadow: 0 0 0 2px rgba(240, 180, 41, 0.18), 0 0 26px rgba(240, 180, 41, 0.14);
+}
+
+.action-card.attention {
+  background: linear-gradient(180deg, rgba(240, 180, 41, 0.08), transparent), var(--panel);
+}
+
+.waiver-card.needs-decision,
+.event-card.needs-decision {
+  border-color: rgba(240, 180, 41, 0.55);
+  box-shadow: 0 0 0 1px rgba(240, 180, 41, 0.12);
+}
+
+.direction-picker {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-gap: 8px;
+  margin-top: 12px;
+}
+
+.direction-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 10px;
+  color: var(--text);
+}
+
+.direction-chip.global {
+  grid-column: 1 / -1;
+}
+
+.direction-chip.selected {
+  border-color: var(--accent);
+  background: rgba(240, 180, 41, 0.08);
+}
+
+.check-box {
+  position: relative;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin-top: 2px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #0e141b;
+}
+
+.direction-chip.selected .check-box {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.direction-chip.selected .check-box::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 5px;
+  height: 9px;
+  border-right: 2px solid #1f1600;
+  border-bottom: 2px solid #1f1600;
+  transform: rotate(45deg);
+}
+
+.chip-main {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.chip-sub {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.decision-subpanel {
+  margin-top: 12px;
+}
+
+.decision-subhead {
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.decision-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 8px;
+  padding: 10px 11px;
+  text-align: left;
+  color: var(--text);
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+}
+
+.decision-option:disabled {
+  opacity: 0.45;
+}
+
+.decision-option.selected {
+  border-color: var(--accent);
+  background: linear-gradient(90deg, rgba(240, 180, 41, 0.1), transparent), var(--panel2);
+}
+
+.decision-option .action-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.decision-option .action-meta {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.decision-option-cost {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.decision-hint {
+  color: var(--muted);
+  font-size: 12px;
+  padding: 10px 0 2px;
+}
+
+.decision-list {
+  display: grid;
+  grid-gap: 8px;
+  margin-top: 12px;
+}
+
+.decision-row {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 10px 11px;
+}
+
+.decision-row.disabled {
+  opacity: 0.45;
+}
+
+.decision-row-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.decision-row .action-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.decision-row .action-meta {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.decision-row .btn {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.inline-select {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 8px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #0e141b;
+  color: var(--text);
+  padding: 8px 10px;
+}
+
+.decision-done {
+  border-color: rgba(63, 185, 80, 0.48);
+  background: linear-gradient(180deg, rgba(63, 185, 80, 0.08), transparent), var(--panel);
+  box-shadow: 0 0 0 1px rgba(63, 185, 80, 0.08);
+}
+
+.decision-done .h2 {
+  font-size: 24px;
+}
+
+.effect-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.effect-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(240, 180, 41, 0.32);
+  background: rgba(240, 180, 41, 0.09);
+  color: #f5d58a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.decision-entry .effect-chips {
+  margin-top: 8px;
+}
+
+.decision-entry .h2 {
+  font-size: 21px;
+}
+
+.decision-entry .row.between {
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.decision-entry .body {
+  margin-top: 4px;
+}
+
+.decision-screen .decision-panel {
+  margin-bottom: 10px;
+}
+
+@keyframes decision-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px rgba(240, 180, 41, 0.12), 0 0 18px rgba(240, 180, 41, 0.06);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(240, 180, 41, 0.22), 0 0 28px rgba(240, 180, 41, 0.16);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 390px) {
+  h1 {
+    font-size: 40px;
+  }
+
+  .ending-title {
+    font-size: 30px;
+  }
+
+  .stats-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .topbar {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .topbar .topbar-item:last-child {
+    display: none;
+  }
+
+  .roster {
+    grid-template-columns: 1fr;
+  }
+
+  .check-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+.card,
+.panel {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent), var(--panel);
+  box-shadow: 0 10px 28px rgba(90, 70, 30, 0.045);
+}
+
+.card.subtle {
+  background: rgba(31, 41, 51, 0.032);
+  box-shadow: none;
+}
+
+.input,
+.inline-select {
+  background: #fffdf9;
+  color: var(--text);
+}
+
+.input::placeholder {
+  color: #9b9487;
+}
+
+.body,
+.pitch,
+.ending-body,
+.quote {
+  color: #3a4552;
+}
+
+.topbar {
+  background: linear-gradient(180deg, rgba(247, 242, 231, 0.98) 65%, rgba(247, 242, 231, 0));
+}
+
+.stat,
+.truth-stat,
+.badge,
+.staff-chip {
+  background: rgba(31, 41, 51, 0.035);
+}
+
+.staff-chip {
+  color: #3a4552;
+}
+
+.badge.bad {
+  color: #a12a22;
+}
+
+.milestone {
+  border-top-color: rgba(120, 108, 85, 0.24);
+}
+
+.tag {
+  color: #24557f;
+  background: rgba(31, 111, 235, 0.08);
+  border-color: rgba(31, 111, 235, 0.2);
+}
+
+.clue,
+.effect-chip {
+  color: #7a5b00;
+}
+
+.warning,
+.risk-mid {
+  color: #8a5a00;
+}
+
+.btn.danger,
+.budget-crisis-title,
+.budget-result .mini-title,
+.empty-badge,
+.check.bad .check-value,
+.risk-high {
+  color: #a12a22;
+}
+
+.budget-crisis-text,
+.decision-tag.pending {
+  color: #7a5b00;
+}
+
+.result,
+.badge.ok,
+.decision-tag.done {
+  color: #226b32;
+}
+
+.progress {
+  background: #eee6d7;
+  border-color: var(--line);
+}
+
+.check-box {
+  background: #fffdf9;
+}
+
+.direction-chip.selected .check-box::after {
+  border-color: var(--accent-ink);
+}
+
+.toast {
+  background: #fffdf9;
+  border-color: var(--line);
+  color: var(--text);
+  box-shadow: 0 12px 30px rgba(70, 55, 25, 0.16);
+}
+
+.sheet-backdrop {
+  background: rgba(38, 32, 23, 0.42);
+}
+
+.sheet-handle {
+  background: #c9bda8;
+}
+
+table th,
+table td {
+  border-bottom-color: rgba(120, 108, 85, 0.24);
+}
+
+table th {
+  background: rgba(31, 41, 51, 0.035);
+}
+
+.decision-banner {
+  box-shadow: 0 8px 22px rgba(190, 140, 20, 0.08);
+}
+
+.btn,
+.btn-group,
+.row,
+.milestone,
+.direction-head,
+.candidate-head,
+.tags,
+.track-head,
+.staff-row,
+.action-card,
+.sheet-head,
+.assign-row,
+.direction-chip,
+.decision-option,
+.decision-row-head,
+.effect-chips {
+  gap: 0;
+}
+
+.btn-group {
+  margin-right: -8px;
+}
+
+.btn-group > * {
+  margin: 0 8px 8px 0;
+}
+
+.row > * + * {
+  margin-left: 10px;
+}
+
+.milestone > * + * {
+  margin-left: 8px;
+}
+
+.direction-head > * + * {
+  margin-left: 12px;
+}
+
+.candidate-head > * + * {
+  margin-left: 10px;
+}
+
+.tags {
+  margin-right: -6px;
+}
+
+.tags > * {
+  margin: 0 6px 6px 0;
+}
+
+.track-head > * + * {
+  margin-left: 10px;
+}
+
+.staff-row {
+  margin-right: -6px;
+}
+
+.staff-row > * {
+  margin: 0 6px 6px 0;
+}
+
+.action-card > * + * {
+  margin-left: 12px;
+}
+
+.sheet-head > * + * {
+  margin-left: 12px;
+}
+
+.assign-row > * + * {
+  margin-left: 10px;
+}
+
+.direction-chip > * + * {
+  margin-left: 8px;
+}
+
+.decision-option > * + * {
+  margin-left: 10px;
+}
+
+.decision-row-head > * + * {
+  margin-left: 8px;
+}
+
+.effect-chips {
+  margin-right: -6px;
+}
+
+.effect-chips > * {
+  margin: 0 6px 6px 0;
+}
+
+.decision-entry .row.between {
+  gap: 0;
+}
+
+.decision-entry .row.between > * + * {
+  margin-left: 12px;
+}
+
+</style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="modalRoot"></div>
+  <div id="toast" class="toast"></div>
+
+  <script>
+(function (global) {
+  function mulberry32(a) {
+    return function () {
+      a |= 0;
+      a = (a + 0x6d2b79f5) | 0;
+      var t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function hashSeed(str) {
+    var h = 2166136261 >>> 0;
+    str = String(str);
+    for (var i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return h >>> 0;
+  }
+
+  function randomSeed() {
+    return Math.random().toString(36).slice(2, 8).toUpperCase();
+  }
+
+  global.RNG = {
+    mulberry32: mulberry32,
+    hashSeed: hashSeed,
+    randomSeed: randomSeed
+  };
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+  <script>
+(function (global) {
+  var GC = (global.GameContent = global.GameContent || {});
+
+  GC.directions = [
+    { id: "arch", name: "架构", active: [1, 2, 3], hint: "模块划分、接口和架构评审" },
+    { id: "algo", name: "算法", active: [1, 2, 3], hint: "算法模型、定点化和性能" },
+    { id: "rtl", name: "RTL", active: [2, 3, 4, 5], hint: "前端实现与迭代" },
+    { id: "dv", name: "验证", active: [2, 3, 4, 5, 6], hint: "环境、覆盖率和 bug 收敛" },
+    { id: "midend", name: "中端", active: [3, 4, 5, 6], hint: "综合、DFT、低功耗" },
+    { id: "backend", name: "后端", active: [4, 5, 6], hint: "floorplan、时序、DRC/LVS" }
+  ];
+
+  GC.candidateTeams = [
+    {
+      id: "arch_wang",
+      direction: "arch",
+      name: "老王架构团队",
+      lead: "老王",
+      avgYears: 6,
+      desc: "大厂架构团队，主导过三颗 SoC。最擅长把复杂问题讲简单，但 RTL 和验证细节别指望他们。团队不加班，也不太接受强管理。",
+      leadBio: "老王，大厂架构师，PPT 和架构评审很强，细节靠团队。",
+      tags: ["大厂背景", "能说会道", "高预算", "不加班", "不服管", "跳槽风险"],
+      clues: [
+        "他们确实主导过三颗 SoC，但两颗是别人收的尾。",
+        "问到 RTL 细节时，老王说“那是下面人干的”。",
+        "团队里真正画图的是两个中级工程师。"
+      ],
+      fit: 1.05,
+      hidden: { skill: 82, quality: 68, speed: 55, collab: 55, stability: 60, bias: 18, traits: ["paper_tiger", "ego", "ppt_driven"] }
+    },
+    {
+      id: "arch_xu",
+      direction: "arch",
+      name: "老许架构团队",
+      lead: "老许",
+      avgYears: 5,
+      desc: "十年架构团队，接口定义很少返工，决策偏保守。到点下班。",
+      leadBio: "老许，大厂十年架构，擅长模块划分和接口，决策慢。",
+      tags: ["稳重", "保守", "文档全", "不加班"],
+      clues: [
+        "接口定义很少返工，但架构评审时很少拍板。",
+        "愿意配合老王，但不愿意替老王背锅。",
+        "关键决策会往后拖。"
+      ],
+      fit: 1.0,
+      hidden: { skill: 72, quality: 78, speed: 50, collab: 70, stability: 78, bias: 5, traits: ["conservative", "document_heavy"] }
+    },
+    {
+      id: "arch_outsource",
+      direction: "arch",
+      name: "外包架构团队",
+      lead: "老周",
+      avgYears: 2,
+      desc: "便宜、人多，架构文档和 PPT 都能出，但没人真正拍板。",
+      leadBio: "老周，外包架构负责人，交付文档很快，决策靠客户。",
+      tags: ["外包", "便宜", "人多"],
+      clues: [
+        "PPT 很漂亮，但架构决策要客户拍板。",
+        "外包团队流动率高，接口定义经常换人。",
+        "报价便宜，改动要加钱。"
+      ],
+      fit: 0.95,
+      hidden: { skill: 55, quality: 48, speed: 65, collab: 60, stability: 45, bias: 12, traits: ["outsourced", "paper_tiger", "high_turnover"] }
+    },
+    {
+      id: "algo_xia",
+      direction: "algo",
+      name: "小夏算法团队",
+      lead: "小夏",
+      avgYears: 2,
+      desc: "刚毕业的算法比赛团队，便宜、能推公式，但没做过量产芯片。便宜、能加班。",
+      leadBio: "小夏，算法比赛金牌，理论强，量产经验少。",
+      tags: ["新人", "算法强", "便宜", "能加班"],
+      clues: [
+        "算法比赛金牌，但没做过量产芯片。",
+        "她愿意学，但需要有人带。",
+        "对客户改需求没有概念。"
+      ],
+      fit: 1.1,
+      hidden: { skill: 86, quality: 60, speed: 70, collab: 75, stability: 60, bias: -15, traits: ["innovative", "no_production"] }
+    },
+    {
+      id: "algo_kai",
+      direction: "algo",
+      name: "阿凯算法团队",
+      lead: "阿凯",
+      avgYears: 6,
+      desc: "算法老手团队，做过两代通信算法，指标不惊艳但能落地。到点下班，周末不回消息。",
+      leadBio: "阿凯，通信算法老手，定点化和量产经验很足。",
+      tags: ["算法老手", "落地型", "高预算", "不加班"],
+      clues: [
+        "指标一般，但流片后很少出问题。",
+        "对新论文不感兴趣，对功耗和定点化很敏感。",
+        "愿意带新人，但不擅长讲漂亮话。"
+      ],
+      fit: 1.05,
+      hidden: { skill: 78, quality: 82, speed: 55, collab: 65, stability: 72, bias: 8, traits: ["production_ready", "conservative"] }
+    },
+    {
+      id: "algo_lab",
+      direction: "algo",
+      name: "高校算法团队",
+      lead: "陈教授",
+      avgYears: 3,
+      desc: "高校联合实验室，论文指标很漂亮，工程化要人兜底。",
+      leadBio: "陈教授，高校实验室负责人，论文强，工程化弱。",
+      tags: ["学术", "便宜", "论文强"],
+      clues: [
+        "论文指标很漂亮，但没考虑定点误差。",
+        "学生流动率高，代码风格不统一。",
+        "便宜，但需要工程团队收尾。"
+      ],
+      fit: 1.0,
+      hidden: { skill: 80, quality: 45, speed: 60, collab: 50, stability: 55, bias: 15, traits: ["academic", "integration_risk", "high_turnover"] }
+    },
+    {
+      id: "rtl_wang",
+      direction: "rtl",
+      name: "老王 RTL 团队",
+      lead: "老王",
+      avgYears: 5,
+      desc: "大厂 RTL 团队，做过三颗 SoC，交付快，lint 习惯一般。不服管，猎头电话多。",
+      leadBio: "老王，大厂 RTL 负责人，交付猛，质量靠后期修。",
+      tags: ["快手", "大厂背景", "质量风险", "不服管", "跳槽风险"],
+      clues: [
+        "功能交付很快，但 lint 警告常年不清。",
+        "上一颗芯片流片后改了三个 ECO。",
+        "加班很猛，但不喜欢写文档。"
+      ],
+      fit: 1.0,
+      hidden: { skill: 84, quality: 58, speed: 85, collab: 60, stability: 55, bias: 10, traits: ["fast", "lint_dirty", "eco_prone"] }
+    },
+    {
+      id: "rtl_jie",
+      direction: "rtl",
+      name: "阿杰 RTL 团队",
+      lead: "阿杰",
+      avgYears: 3,
+      desc: "三个人，出活快，质量看运气。三个人能连轴转。",
+      leadBio: "阿杰，RTL 快手，功能对得快，lint 习惯差。",
+      tags: ["便宜", "快手", "粗放", "能加班"],
+      clues: [
+        "功能对得快，但 lint 警告堆得快。",
+        "上一颗芯片改了三个 ECO。",
+        "人少，关键模块没有 backup。"
+      ],
+      fit: 1.0,
+      hidden: { skill: 80, quality: 52, speed: 82, collab: 60, stability: 65, bias: 8, traits: ["fast", "lint_dirty", "bus_factor"] }
+    },
+    {
+      id: "rtl_outsource",
+      direction: "rtl",
+      name: "外包 RTL 团队",
+      lead: "老吴",
+      avgYears: 2,
+      desc: "便宜、人多、能加班，但流动率高。",
+      leadBio: "老吴，外包 RTL 负责人，人手足，接口经常换人。",
+      tags: ["外包", "便宜", "人多"],
+      clues: [
+        "人很多，但关键模块换过三拨人。",
+        "交付快，集成时接口经常对不上。",
+        "报价便宜，改动要加钱。"
+      ],
+      fit: 0.95,
+      hidden: { skill: 60, quality: 48, speed: 75, collab: 65, stability: 40, bias: 12, traits: ["outsourced", "high_turnover", "integration_risk"] }
+    },
+    {
+      id: "dv_lin",
+      direction: "dv",
+      name: "小林验证团队",
+      lead: "小林",
+      avgYears: 5,
+      desc: "只做过小模块，但问的问题很细；她说没问题，通常是真的。",
+      leadBio: "小林，验证细节控，覆盖率模型很清楚，不轻易说没问题。",
+      tags: ["谦虚", "细节控", "可靠"],
+      clues: [
+        "她说自己不行的项目，最好别硬推。",
+        "能讲清三种覆盖率模型。",
+        "对加班没意见，但坚持要留回归时间。"
+      ],
+      fit: 1.1,
+      hidden: { skill: 86, quality: 84, speed: 60, collab: 75, stability: 75, bias: -22, traits: ["meticulous", "modest"] }
+    },
+    {
+      id: "dv_zhao",
+      direction: "dv",
+      name: "老赵验证团队",
+      lead: "老赵",
+      avgYears: 7,
+      desc: "验证流程专家，覆盖率不收敛不下班，慢但稳。不加班。",
+      leadBio: "老赵，验证流程专家，环境稳，节奏慢。",
+      tags: ["流程控", "稳", "慢", "不加班"],
+      clues: [
+        "回归环境三年没崩过。",
+        "对新协议、新工具接受度一般。",
+        "坚持每个 bug 都要有复现用例。"
+      ],
+      fit: 1.0,
+      hidden: { skill: 82, quality: 88, speed: 45, collab: 55, stability: 85, bias: -8, traits: ["process_heavy", "slow", "reliable"] }
+    },
+    {
+      id: "dv_outsource",
+      direction: "dv",
+      name: "外包验证团队",
+      lead: "老钱",
+      avgYears: 2,
+      desc: "便宜、人多、回归跑得勤，覆盖率数字很好看。能加班跑回归。",
+      leadBio: "老钱，外包验证负责人，跑回归很勤，覆盖质量一般。",
+      tags: ["外包", "便宜", "数字好看", "能加班"],
+      clues: [
+        "覆盖率数字很好看，但很多是重复用例。",
+        "定向用例要另外加钱。",
+        "流动率高，环境经常重建。"
+      ],
+      fit: 0.95,
+      hidden: { skill: 62, quality: 50, speed: 70, collab: 65, stability: 45, bias: 15, traits: ["outsourced", "coverage_theater", "high_turnover"] }
+    },
+    {
+      id: "midend_may",
+      direction: "midend",
+      name: "阿 May 中端团队",
+      lead: "阿 May",
+      avgYears: 6,
+      desc: "综合 / DFT 全能，上一颗芯片一次 signoff 过；身价高，稳定性一般。高维护，跳槽风险。",
+      leadBio: "阿 May，中端明星，综合/DFT 很强，稳定性一般。",
+      tags: ["高身价", "履历漂亮", "强", "不服管", "跳槽风险"],
+      clues: [
+        "上一颗芯片“一次过”的项目，她只待了最后三个月。",
+        "对 DFT 覆盖率很敏感，但不太愿意做低功耗。",
+        "开价高，且要求独立办公室。"
+      ],
+      fit: 1.05,
+      hidden: { skill: 88, quality: 82, speed: 65, collab: 60, stability: 40, bias: 12, traits: ["star", "job_hopper", "expensive"] }
+    },
+    {
+      id: "midend_gu",
+      direction: "midend",
+      name: "小顾综合团队",
+      lead: "小顾",
+      avgYears: 3,
+      desc: "便宜、听话、能跑流程；遇到低功耗和 RTL 冲突时，只会按脚本办事。",
+      leadBio: "小顾，外包综合负责人，脚本熟练，方案模板化。",
+      tags: ["外包", "便宜", "模板化"],
+      clues: [
+        "外包团队流动率高。",
+        "只会跑现成脚本，遇到新工艺要人带。",
+        "低功耗方案只会套模板。"
+      ],
+      fit: 0.95,
+      hidden: { skill: 58, quality: 55, speed: 60, collab: 65, stability: 50, bias: 12, traits: ["outsourced", "script_driven", "low_power_gap"] }
+    },
+    {
+      id: "midend_team",
+      direction: "midend",
+      name: "中端双核团队",
+      lead: "老韩",
+      avgYears: 5,
+      desc: "综合、DFT、低功耗各有人，预算不低，但中端最稳。流程重，不加班。",
+      leadBio: "老韩，中端负责人，综合/DFT/低功耗各有人，流程重。",
+      tags: ["均衡", "高预算", "稳", "不加班"],
+      clues: [
+        "三个人各管一摊，接口文档写得很细。",
+        "预算高，但很少在中端翻车。",
+        "决策慢，什么都要求评审。"
+      ],
+      fit: 1.0,
+      hidden: { skill: 76, quality: 75, speed: 60, collab: 70, stability: 65, bias: 5, traits: ["balanced", "document_heavy"] }
+    },
+    {
+      id: "backend_chen",
+      direction: "backend",
+      name: "老陈后端团队",
+      lead: "老陈",
+      avgYears: 8,
+      desc: "后端老法师团队，话少手稳；别让他们参加评审会，让他们安心做 floorplan。沟通差，不服管。",
+      leadBio: "老陈，后端老法师，floorplan 很少返工，沟通很差。",
+      tags: ["老法师", "手稳", "沟通差", "不服管"],
+      clues: [
+        "floorplan 很少返工，但不喜欢别人碰他的脚本。",
+        "技术没问题，沟通要命。",
+        "对流片前的 waiver 极其保守。"
+      ],
+      fit: 1.05,
+      hidden: { skill: 88, quality: 86, speed: 55, collab: 35, stability: 80, bias: -10, traits: ["lone_wolf", "hand_steady", "waiver_conservative"] }
+    },
+    {
+      id: "backend_xu",
+      direction: "backend",
+      name: "小许后端团队",
+      lead: "小许",
+      avgYears: 2,
+      desc: "刚转后端一年，便宜、肯加班、愿意学；时序收敛和 DRC 会教你做人。",
+      leadBio: "小许，后端新人，肯学，signoff 前需要人兜底。",
+      tags: ["新人", "便宜", "肯学", "能加班"],
+      clues: [
+        "上一颗芯片只做到模块级。",
+        "时序收敛的理解还停留在“多跑几遍”。",
+        "便宜，但 signoff 前可能要人兜底。"
+      ],
+      fit: 0.95,
+      hidden: { skill: 60, quality: 58, speed: 65, collab: 70, stability: 60, bias: -6, traits: ["junior", "learning", "signoff_risk"] }
+    },
+    {
+      id: "backend_outsource",
+      direction: "backend",
+      name: "外包后端团队",
+      lead: "老孙",
+      avgYears: 3,
+      desc: "人多、便宜、能熬夜；跑流程没问题，signoff 前要人兜底。",
+      leadBio: "老孙，外包后端负责人，人多能熬，关键步骤没人负责。",
+      tags: ["外包", "便宜", "人多"],
+      clues: [
+        "人多，能熬夜，但关键步骤没人负责。",
+        "DRC 清得快，LVS 经常返工。",
+        "报价便宜，signoff 支持要加钱。"
+      ],
+      fit: 0.95,
+      hidden: { skill: 68, quality: 52, speed: 70, collab: 65, stability: 45, bias: 10, traits: ["outsourced", "drc_risk", "signoff_risk"] }
+    },
+
+    {
+      id: "arch_hai",
+      direction: "arch",
+      name: "海归架构团队",
+      lead: "老K",
+      avgYears: 6,
+      desc: "海外大厂架构团队，方法论完整，但不加班、不服管，猎头电话多。",
+      leadBio: "老K，海外大厂架构负责人，方法论强，落地要人接。",
+      tags: ["海归", "高预算", "不加班", "不服管", "跳槽风险"],
+      clues: ["他讲架构像讲教科书，但不愿意下现场。", "团队不接受强排期，猎头电话很多。", "海外经验很漂亮，国内量产经验一般。"],
+      fit: 1.05,
+      hidden: { skill: 80, quality: 70, speed: 50, collab: 45, stability: 50, bias: 12, traits: ["paper_tiger", "ego", "job_hopper", "no_overtime", "not_manageable"] }
+    },
+    {
+      id: "arch_lab",
+      direction: "arch",
+      name: "高校架构组",
+      lead: "陈老师",
+      avgYears: 3,
+      desc: "高校联合架构组，便宜、能加班，但工程落地要人兜底。",
+      leadBio: "陈老师，高校架构负责人，论文强，工程弱。",
+      tags: ["学术", "便宜", "能加班", "流动率高"],
+      clues: ["架构图很漂亮，接口定义经常缺细节。", "学生流动率高，文档风格不统一。", "便宜，但需要工程团队收尾。"],
+      fit: 0.95,
+      hidden: { skill: 65, quality: 52, speed: 60, collab: 60, stability: 50, bias: 8, traits: ["academic", "integration_risk", "high_turnover", "eager"] }
+    },
+    {
+      id: "algo_vet",
+      direction: "algo",
+      name: "通信算法老兵组",
+      lead: "老宋",
+      avgYears: 8,
+      desc: "通信算法老兵，指标稳、能落地，但不加班。",
+      leadBio: "老宋，通信算法老兵，做过两代量产芯片，节奏慢。",
+      tags: ["算法老兵", "不加班", "稳"],
+      clues: ["指标不惊艳，但流片后很少出问题。", "到点下班，周末不回消息。", "对新论文不感兴趣，对定点化很敏感。"],
+      fit: 1.05,
+      hidden: { skill: 82, quality: 82, speed: 45, collab: 55, stability: 80, bias: -5, traits: ["production_ready", "no_overtime", "conservative"] }
+    },
+    {
+      id: "algo_ai",
+      direction: "algo",
+      name: "AI 算法组",
+      lead: "小艾",
+      avgYears: 3,
+      desc: "AI 算法组，能加班、指标新，但量产经验少。",
+      leadBio: "小艾，AI 算法负责人，模型新，工程化靠别人。",
+      tags: ["AI", "能加班", "便宜", "经验少"],
+      clues: ["模型指标很新，但没考虑定点误差。", "愿意通宵调模型，不太愿意写文档。", "便宜，但量产经验少。"],
+      fit: 1.0,
+      hidden: { skill: 84, quality: 55, speed: 75, collab: 65, stability: 50, bias: 10, traits: ["innovative", "eager", "no_production", "integration_risk"] }
+    },
+    {
+      id: "rtl_senior",
+      direction: "rtl",
+      name: "大厂 RTL 老兵组",
+      lead: "老马",
+      avgYears: 8,
+      desc: "大厂 RTL 老兵组，质量稳，但不加班、不服管。",
+      leadBio: "老马，大厂 RTL 老兵，质量稳，脾气也稳。",
+      tags: ["老兵", "不加班", "不服管", "质量稳"],
+      clues: ["代码质量很好，但不愿意赶工。", "评审会上不接受外行指挥。", "到点下班，猎头电话不少。"],
+      fit: 1.0,
+      hidden: { skill: 82, quality: 80, speed: 50, collab: 40, stability: 75, bias: -8, traits: ["hand_steady", "lone_wolf", "no_overtime", "not_manageable"] }
+    },
+    {
+      id: "rtl_rookie",
+      direction: "rtl",
+      name: "应届 RTL 突击队",
+      lead: "小丁",
+      avgYears: 1,
+      desc: "应届 RTL 突击队，便宜、能加班，但 lint 和 backup 都缺。",
+      leadBio: "小丁，应届 RTL 负责人，能熬夜，经验浅。",
+      tags: ["应届", "便宜", "能加班", "质量风险"],
+      clues: ["三个人能连轴转，但关键模块没有 backup。", "lint 警告很多，交付前才清。", "便宜，但需要人带。"],
+      fit: 0.95,
+      hidden: { skill: 55, quality: 45, speed: 75, collab: 75, stability: 55, bias: -10, traits: ["eager", "junior", "lint_dirty", "bus_factor"] }
+    },
+    {
+      id: "dv_lead",
+      direction: "dv",
+      name: "验证架构组",
+      lead: "老蒋",
+      avgYears: 7,
+      desc: "验证架构组，覆盖率和流程都很强，但不加班。",
+      leadBio: "老蒋，验证架构负责人，流程和覆盖率都很强。",
+      tags: ["验证架构", "不加班", "高预算"],
+      clues: ["回归环境搭得很好，但到点下班。", "覆盖率不收敛就不签字。", "预算高，但很少在验证上翻车。"],
+      fit: 1.05,
+      hidden: { skill: 85, quality: 85, speed: 50, collab: 60, stability: 70, bias: -5, traits: ["meticulous", "process_heavy", "no_overtime"] }
+    },
+    {
+      id: "dv_ai",
+      direction: "dv",
+      name: "AI 验证组",
+      lead: "小苏",
+      avgYears: 3,
+      desc: "AI 验证组，能加班、工具新，但覆盖率数字有水分。",
+      leadBio: "小苏，AI 验证负责人，工具新，覆盖质量一般。",
+      tags: ["AI", "能加班", "数字好看"],
+      clues: ["覆盖率数字很好看，但很多是重复用例。", "愿意通宵跑回归，工具链很强。", "便宜，但定向用例经验少。"],
+      fit: 0.95,
+      hidden: { skill: 70, quality: 60, speed: 75, collab: 65, stability: 55, bias: 8, traits: ["eager", "coverage_theater", "learning"] }
+    },
+    {
+      id: "midend_power",
+      direction: "midend",
+      name: "低功耗专精组",
+      lead: "老秦",
+      avgYears: 7,
+      desc: "低功耗专精组，功耗和综合很强，但不加班。",
+      leadBio: "老秦，低功耗专家，功耗和综合很强，节奏慢。",
+      tags: ["低功耗", "不加班", "专精"],
+      clues: ["功耗方案很细，但不接受赶工。", "综合和低功耗很强，DFT 一般。", "到点下班，周末不接电话。"],
+      fit: 1.05,
+      hidden: { skill: 80, quality: 78, speed: 55, collab: 65, stability: 70, bias: 5, traits: ["specialist", "no_overtime", "low_power_expert"] }
+    },
+    {
+      id: "midend_rookie",
+      direction: "midend",
+      name: "应届中端组",
+      lead: "小鲁",
+      avgYears: 2,
+      desc: "应届中端组，便宜、能加班，但只会跑脚本。",
+      leadBio: "小鲁，中端新人，脚本熟练，方案模板化。",
+      tags: ["应届", "便宜", "能加班", "模板化"],
+      clues: ["脚本跑得很熟，遇到新工艺要人带。", "愿意熬夜，但方案只会套模板。", "便宜，但低功耗经验少。"],
+      fit: 0.95,
+      hidden: { skill: 55, quality: 50, speed: 70, collab: 70, stability: 55, bias: -8, traits: ["eager", "script_driven", "high_turnover"] }
+    },
+    {
+      id: "backend_top",
+      direction: "backend",
+      name: "后端专家团",
+      lead: "老龚",
+      avgYears: 9,
+      desc: "后端专家团，质量和时序很强，但不加班、不服管。",
+      leadBio: "老龚，后端专家，floorplan 和时序很强，沟通很差。",
+      tags: ["专家", "不加班", "不服管", "手稳"],
+      clues: ["floorplan 很少返工，但不接受别人改脚本。", "技术很强，沟通要命。", "到点下班，流片前也不加班。"],
+      fit: 1.05,
+      hidden: { skill: 85, quality: 85, speed: 45, collab: 40, stability: 80, bias: -8, traits: ["lone_wolf", "no_overtime", "not_manageable", "hand_steady"] }
+    },
+    {
+      id: "backend_fast",
+      direction: "backend",
+      name: "后端突击组",
+      lead: "小雷",
+      avgYears: 3,
+      desc: "后端突击组，便宜、能熬夜，但 DRC/signoff 要人兜底。",
+      leadBio: "小雷，后端突击负责人，能熬夜，质量看运气。",
+      tags: ["突击", "能加班", "DRC风险"],
+      clues: ["人多能熬夜，但关键步骤没人负责。", "DRC 清得快，LVS 经常返工。", "便宜，但 signoff 前要人兜底。"],
+      fit: 0.95,
+      hidden: { skill: 65, quality: 55, speed: 80, collab: 65, stability: 50, bias: 10, traits: ["eager", "drc_risk", "signoff_risk"] }
+    }
+  ];
+
+  var TEAM_TRAITS = {
+    arch_wang: ["no_overtime", "not_manageable", "job_hopper"],
+    arch_xu: ["no_overtime"],
+    algo_kai: ["no_overtime"],
+    dv_zhao: ["no_overtime"],
+    midend_team: ["no_overtime"],
+    rtl_wang: ["not_manageable", "job_hopper"],
+    midend_may: ["not_manageable"],
+    backend_chen: ["not_manageable"],
+    algo_xia: ["eager"],
+    rtl_jie: ["eager"],
+    backend_xu: ["eager"],
+    rtl_outsource: ["eager"],
+    dv_outsource: ["eager"]
+  };
+
+  GC.candidateTeams.forEach(function (team) {
+    (TEAM_TRAITS[team.id] || []).forEach(function (trait) {
+      if (team.hidden.traits.indexOf(trait) < 0) team.hidden.traits.push(trait);
+    });
+  });
+
+  GC.levelPay = {
+    top: 12.5,
+    expert: 9,
+    senior: 6.5,
+    engineer: 4,
+    junior: 2.5
+  };
+
+  var TEAM_LEVELS = {
+    arch_wang: { top: 1, expert: 1, senior: 1, engineer: 1, junior: 1 },
+    arch_xu: { top: 0, expert: 1, senior: 2, engineer: 1, junior: 0 },
+    arch_outsource: { top: 0, expert: 0, senior: 0, engineer: 3, junior: 3 },
+    algo_xia: { top: 0, expert: 1, senior: 0, engineer: 1, junior: 1 },
+    algo_kai: { top: 1, expert: 1, senior: 1, engineer: 2, junior: 0 },
+    algo_lab: { top: 0, expert: 1, senior: 1, engineer: 1, junior: 1 },
+    rtl_wang: { top: 1, expert: 1, senior: 1, engineer: 2, junior: 0 },
+    rtl_jie: { top: 0, expert: 1, senior: 1, engineer: 1, junior: 0 },
+    rtl_outsource: { top: 0, expert: 0, senior: 0, engineer: 3, junior: 3 },
+    dv_lin: { top: 0, expert: 1, senior: 2, engineer: 1, junior: 0 },
+    dv_zhao: { top: 1, expert: 1, senior: 2, engineer: 1, junior: 0 },
+    dv_outsource: { top: 0, expert: 0, senior: 0, engineer: 2, junior: 4 },
+    midend_may: { top: 1, expert: 1, senior: 0, engineer: 1, junior: 0 },
+    midend_gu: { top: 0, expert: 0, senior: 1, engineer: 2, junior: 1 },
+    midend_team: { top: 1, expert: 1, senior: 1, engineer: 2, junior: 1 },
+    backend_chen: { top: 1, expert: 1, senior: 1, engineer: 1, junior: 0 },
+    backend_xu: { top: 0, expert: 0, senior: 1, engineer: 1, junior: 1 },
+    backend_outsource: { top: 0, expert: 0, senior: 1, engineer: 3, junior: 2 },
+    arch_hai: { top: 1, expert: 1, senior: 1, engineer: 2, junior: 0 },
+    arch_lab: { top: 0, expert: 1, senior: 1, engineer: 1, junior: 1 },
+    algo_vet: { top: 1, expert: 1, senior: 1, engineer: 1, junior: 0 },
+    algo_ai: { top: 0, expert: 1, senior: 1, engineer: 2, junior: 1 },
+    rtl_senior: { top: 1, expert: 1, senior: 1, engineer: 1, junior: 0 },
+    rtl_rookie: { top: 0, expert: 0, senior: 1, engineer: 2, junior: 2 },
+    dv_lead: { top: 1, expert: 1, senior: 2, engineer: 1, junior: 0 },
+    dv_ai: { top: 0, expert: 1, senior: 1, engineer: 1, junior: 1 },
+    midend_power: { top: 1, expert: 1, senior: 0, engineer: 1, junior: 0 },
+    midend_rookie: { top: 0, expert: 0, senior: 1, engineer: 2, junior: 1 },
+    backend_top: { top: 1, expert: 1, senior: 0, engineer: 1, junior: 0 },
+    backend_fast: { top: 0, expert: 1, senior: 1, engineer: 2, junior: 1 }
+  };
+
+  GC.candidateTeams.forEach(function (team) {
+    var lv = TEAM_LEVELS[team.id];
+    team.levels = lv;
+    team.headcount = lv.top + lv.expert + lv.senior + lv.engineer + lv.junior;
+    team.salary =
+      lv.top * GC.levelPay.top +
+      lv.expert * GC.levelPay.expert +
+      lv.senior * GC.levelPay.senior +
+      lv.engineer * GC.levelPay.engineer +
+      lv.junior * GC.levelPay.junior;
+  });
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+  <script>
+(function (global) {
+  var GC = (global.GameContent = global.GameContent || {});
+
+  GC.projects = [
+    {
+      id: "xuanwu1",
+      name: "通信 SoC",
+      subtitle: "面向智能音频与感知的通信 SoC",
+      brief:
+        "客户要一颗面向智能音频的通信 SoC。算法指标写得很漂亮，可靠性条款有三页。项目周期 6 个月，预算 1500 万。",
+      budget: 1500,
+      months: 6,
+      complexity: 10,
+      marketWindow: 6,
+      requirements: {
+        performance: 0.9,
+        power: 0.85,
+        reliability: 0.7,
+        cost: 0.6,
+        schedule: 0.9
+      },
+      hidden:
+        "真正的难点是算法定点化、低功耗和后端收敛。架构和算法如果只顾纸面指标，流片后会一起还债。",
+      stageHints: [
+        "M1：规格、架构、算法。先把接口和指标吵清楚，别急着开 RTL。",
+        "M2：RTL 首版和验证环境。架构不冻结，后面全是返工。",
+        "M3：RTL 0.75，中端进场。综合会第一次告诉你真相。",
+        "M4：RTL 0.9，覆盖率启动，后端进场。人手开始不够用。",
+        "M5：RTL freeze，验证收敛，后端迭代。freeze 不是终点。",
+        "M6：修 bug、ECO、signoff。预算和窗口只够修一部分。"
+      ]
+    }
+  ];
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+  <script>
+(function (global) {
+  var GC = (global.GameContent = global.GameContent || {});
+
+  GC.events = [
+    {
+      id: "spec_split",
+      title: "规格分歧",
+      months: [1],
+      weight: 1,
+      text:
+        "客户说“和上一代差不多”，但算法负责人坚持要改接口。销售已经答应客户月底冻结规格。",
+      options: [
+        {
+          label: "按客户说的做",
+          effects: { progress: { arch: 5, algo: 5 }, market: -5, flags: ["spec_ambiguous"] },
+          result: "规格看起来冻结了，但接口里的模糊地带会在验证阶段回来。"
+        },
+        {
+          label: "按算法负责人做",
+          effects: { progress: { algo: 8, arch: 5 }, budget: -25 },
+          result: "架构更干净，但客户关系紧张，销售开始躲着你。"
+        },
+        {
+          label: "拉齐三方会议",
+          effects: { progress: { arch: 3, algo: 3 }, quality: { arch: 3 }, morale: -5, budget: -15 },
+          result: "吵了三天，接口终于对齐。至少后面不用猜了。"
+        }
+      ]
+    },
+    {
+      id: "algo_dream",
+      title: "算法指标太漂亮",
+      months: [1],
+      weight: 1,
+      text:
+        "算法模型仿真性能超标 40%，但还没做定点化。算法团队说“理论上没问题”，架构团队说“先按这个做架构”。",
+      options: [
+        {
+          label: "先做定点验证",
+          effects: { progress: { algo: -5 }, quality: { algo: 8 }, budget: -30, flags: ["algo_checked"] },
+          result: "指标掉了 12%，但至少是真的。架构按保守数字走。"
+        },
+        {
+          label: "相信模型",
+          effects: { progress: { algo: 10 }, flags: ["algo_risk"] },
+          result: "架构按最漂亮的数字做了。你决定先不把担心写进会议纪要。"
+        },
+        {
+          label: "让架构团队评估",
+          effects: { progress: { arch: 5 }, morale: -3, budget: -15 },
+          result: "架构团队说“问题不大”，你决定先记下来，但没写进风险清单。"
+        }
+      ]
+    },
+    {
+      id: "ip_delay",
+      title: "关键 IP 延迟",
+      months: [2],
+      weight: 1,
+      text:
+        "关键 IP 供应商说晚两周交付。RTL 团队已经有人闲着了，负责人开始频繁看手机。",
+      options: [
+        {
+          label: "等",
+          effects: { progress: { rtl: -10 }, delay: 1 },
+          result: "进度滑了一周，供应商说“下周一定”。你不太信。"
+        },
+        {
+          label: "换 IP",
+          effects: { budget: -60, progress: { rtl: -3 }, quality: { rtl: -3 } },
+          result: "新 IP 接口不一样，集成又花了一周。至少东西到了。"
+        },
+        {
+          label: "自己写",
+          effects: {
+            budget: -30,
+            progress: { rtl: -8 },
+            quality: { rtl: -5 },
+            delayed: [{ months: 1, effects: { progress: { rtl: -5 } }, text: "自研 IP 的 bug 在下个月冒出来。" }]
+          },
+          result: "自己写省了授权费，但埋了一颗雷。"
+        }
+      ]
+    },
+    {
+      id: "dv_env",
+      title: "验证环境卡住了",
+      months: [2],
+      weight: 1,
+      text:
+        "验证环境被工具链卡住，跑一个用例要 40 分钟。验证团队说再这样下去覆盖率起不来。",
+      options: [
+        {
+          label: "买工具支持",
+          effects: { budget: -45, progress: { dv: 10 }, quality: { dv: 3 } },
+          result: "工具厂远程解决了 license 和编译问题。钱花得值。"
+        },
+        {
+          label: "让 RTL 帮忙",
+          effects: { progress: { dv: 5, rtl: -5 }, morale: -3 },
+          result: "RTL 团队骂骂咧咧地修了环境，自己的进度也受影响。"
+        },
+        {
+          label: "先跳过",
+          effects: { progress: { dv: -8 }, flags: ["dv_env_gap"] },
+          result: "环境勉强能跑，但很多 corner 没覆盖。你决定先不说。"
+        }
+      ]
+    },
+    {
+      id: "synthesis_fire",
+      title: "综合时序爆炸",
+      months: [3],
+      weight: 1,
+      text:
+        "中端第一次综合，setup violation 一大把，功耗超 18%。中端团队说 RTL 写法有问题，RTL 团队说中端约束太紧。",
+      options: [
+        {
+          label: "让 RTL 修",
+          effects: { progress: { rtl: -8, midend: 10 }, quality: { midend: 3 }, budget: -25 },
+          result: "RTL 团队改了两周，综合终于干净了一点。前端进度也少了两周。"
+        },
+        {
+          label: "中端自己优化",
+          effects: { progress: { midend: 5 }, quality: { midend: -3 }, delay: 1 },
+          result: "中端用脚本硬压，时序余量越来越薄。"
+        },
+        {
+          label: "降频",
+          effects: { market: -8, progress: { midend: 12 }, quality: { midend: 3 } },
+          result: "频率降了 8%，综合好看了，客户脸色不太好看。"
+        }
+      ]
+    },
+    {
+      id: "coverage_plateau",
+      title: "覆盖率停滞",
+      months: [3],
+      weight: 1,
+      text:
+        "覆盖率卡在 55%，验证团队说剩下的 corner 要写定向用例，至少两周。你手里没有两周。",
+      options: [
+        {
+          label: "加验证",
+          effects: { budget: -45, coverage: 10, progress: { dv: 5 } },
+          result: "你临时加了一个验证工程师，覆盖率开始动。"
+        },
+        {
+          label: "让设计自测",
+          effects: { coverage: 5, quality: { rtl: -3 }, morale: -3 },
+          result: "设计自己写的测试，覆盖的都是自己相信的路径。"
+        },
+        {
+          label: "接受风险",
+          effects: { coverage: -5, flags: ["coverage_gap"] },
+          result: "你决定先保进度，把风险留到 signoff。"
+        }
+      ]
+    },
+    {
+      id: "floorplan_congestion",
+      title: "floorplan 拥塞",
+      months: [4],
+      weight: 1,
+      text:
+        "后端 floorplan 发现布线拥塞，面积要涨 8%。后端团队说“早说了 RTL 模块太大”，RTL 团队说“现在改来不及”。",
+      options: [
+        {
+          label: "放宽面积",
+          effects: { budget: -40, progress: { backend: 8 }, market: -3 },
+          result: "面积涨了，封装成本跟着涨。后端团队的脸色好了一点。"
+        },
+        {
+          label: "让前端改 RTL",
+          effects: { progress: { rtl: -6, backend: 6 }, quality: { backend: 3 } },
+          result: "前端返工，后端终于有空间布线。RTL 团队两天没说话。"
+        },
+        {
+          label: "硬推",
+          effects: { progress: { backend: 3 }, quality: { backend: -8 }, flags: ["backend_risk"] },
+          result: "硬推的代价会在时序和 DRC 上出现。"
+        }
+      ]
+    },
+    {
+      id: "competitor",
+      title: "竞品提前发布",
+      months: [4],
+      weight: 1,
+      text:
+        "竞争对手提前发布了同规格产品，客户开始暗示“窗口不等人”。流程不会因此缩短，你只能选择怎么应对。",
+      options: [
+        {
+          label: "加班保证进度",
+          effects: { progress: { rtl: 5, dv: 5, midend: 5, backend: 5 }, morale: -5, quality: { rtl: -3, dv: -3, backend: -3 }, market: 3, flags: ["rush"] },
+          result: "流程没有缩短，团队只能靠加班把进度抢回来。窗口暂时保住了，质量和士气都在付代价。"
+        },
+        {
+          label: "砍功能",
+          effects: { market: -8, progress: { rtl: 5, dv: 5, midend: 5, backend: 5 }, flags: ["cut_scope"] },
+          result: "砍掉两个非核心功能，客户勉强接受。"
+        },
+        {
+          label: "维持原计划",
+          effects: { market: -3 },
+          result: "你决定按原计划走，销售开始天天来问。"
+        }
+      ]
+    },
+    {
+      id: "poach",
+      title: "关键工程师被挖",
+      months: [5],
+      weight: 1,
+      text:
+        "关键工程师收到猎头 offer，团队里开始有人打听年终奖。你不确定消息是谁放出去的。",
+      options: [
+        {
+          label: "加薪留人",
+          effects: { budget: -60, morale: 10 },
+          result: "人留住了，预算少了一截。财务又发来一封邮件。"
+        },
+        {
+          label: "画饼",
+          effects: { morale: -8, flags: ["retention_risk"] },
+          result: "人暂时没走，但信任少了一点。"
+        },
+        {
+          label: "放两天假",
+          effects: { budget: -15, morale: 5 },
+          result: "团队喘了口气，进度没怎么动。"
+        }
+      ]
+    },
+    {
+      id: "late_bug",
+      title: "流片前的 bug",
+      months: [5, 6],
+      weight: 2,
+      text:
+        "验证在最后一个 corner 发现 DMA burst 死锁。验证团队说这个必须修，RTL 团队说“软件可以绕”。",
+      options: [
+        {
+          label: "修",
+          effects: { progress: { rtl: -5 }, bugs: -10, delay: 1, quality: { rtl: 3 } },
+          result: "bug 修了，流片窗口少了一周。"
+        },
+        {
+          label: "Waive",
+          effects: { bugs: 5, flags: ["known_bug"] },
+          result: "你把它记进 errata，希望客户不会踩到。"
+        },
+        {
+          label: "软件绕过",
+          effects: { market: -3, bugs: -5 },
+          result: "软件团队答应加 workaround，性能掉了一点。"
+        }
+      ]
+    },
+    {
+      id: "foundry_slot",
+      title: "代工厂 slot",
+      months: [6],
+      weight: 1,
+      text:
+        "代工厂说流片 slot 可能保不住，除非加钱。财务问你“这颗芯片真的能回本吗”。",
+      options: [
+        {
+          label: "花钱保 slot",
+          effects: { budget: -45 },
+          result: "slot 保住了，财务又发来一封邮件。"
+        },
+        {
+          label: "接受推迟",
+          effects: { delay: 2, market: -5 },
+          result: "流片推迟两周，客户开始找备选方案。"
+        },
+        {
+          label: "换工艺角",
+          effects: { budget: -25, quality: { backend: -3 }, delay: 1 },
+          result: "换了个 corner，风险和后端一起增加。"
+        }
+      ]
+    },
+    {
+      id: "team_conflict",
+      title: "评审会吵起来了",
+      months: [2, 3, 4, 5],
+      weight: 1,
+      text:
+        "RTL 团队里两位资深工程师在评审会上吵起来了。一个说架构没问题，一个说 RTL 已经改不动。所有人都在等你看谁。",
+      options: [
+        {
+          label: "调解",
+          effects: { morale: 5, budget: -15 },
+          result: "你把两个人关在会议室里，出来时至少能说话了。"
+        },
+        {
+          label: "站 RTL 负责人",
+          effects: { morale: -5, progress: { arch: 5 }, quality: { rtl: -2 } },
+          result: "负责人保住了，团队里另一个人开始沉默。"
+        },
+        {
+          label: "不管",
+          effects: { morale: -8, progress: { rtl: -3 } },
+          result: "会议不欢而散，第二天两个人都不回消息。"
+        }
+      ]
+    },
+
+    {
+      id: "customer_change",
+      title: "客户改需求",
+      months: [1],
+      weight: 1,
+      text: "客户突然要改接口，说“和上一代兼容就行”，但销售已经答应月底冻结规格。",
+      options: [
+        { label: "接受变更", effects: { progress: { arch: 5, algo: 5 }, market: -5, budget: -30 }, result: "接口改了，架构和算法重新对齐，客户暂时满意。" },
+        { label: "顶回去", effects: { market: -3, morale: -3 }, result: "你保住了规格，客户说要再评估。" },
+        { label: "冻结旧接口，后面打补丁", effects: { progress: { arch: -5 }, market: 3, flags: ["spec_debt"] }, result: "规格冻结了，但技术债留到了后面。" }
+      ]
+    },
+    {
+      id: "arch_algo_fight",
+      title: "架构和算法吵起来了",
+      months: [1],
+      weight: 1,
+      text: "架构团队要保接口稳定，算法团队要改数据通路。两边都说对方不懂。",
+      options: [
+        { label: "拉齐评审", effects: { progress: { arch: 3, algo: 3 }, morale: -3, budget: -20 }, result: "吵了一下午，至少有了共同版本。" },
+        { label: "站算法", effects: { progress: { algo: 5, arch: -5 }, morale: -3 }, result: "算法指标保住了，架构开始返工。" },
+        { label: "站架构", effects: { progress: { arch: 5, algo: -5 }, morale: -3 }, result: "架构稳住了，算法团队开始沉默。" }
+      ]
+    },
+    {
+      id: "rtl_cdc",
+      title: "CDC 警报",
+      months: [2],
+      weight: 1,
+      text: "RTL 首版跑 CDC，发现跨时钟域路径没处理干净。综合团队已经在等网表。",
+      options: [
+        { label: "停下来修", effects: { progress: { rtl: -5 }, quality: { rtl: 5 }, budget: -30 }, result: "CDC 清掉了，RTL 进度少了一周。" },
+        { label: "先 waive", effects: { quality: { rtl: -5 }, flags: ["cdc_risk"], delayed: [{ months: 1, effects: { bugs: 5 }, text: "CDC 问题在验证后期冒出来。" }] }, result: "你签了 waiver，风险留到了后面。" },
+        { label: "买工具检查", effects: { budget: -45, quality: { rtl: 3 } }, result: "工具扫了一遍，问题少了一些。" }
+      ]
+    },
+    {
+      id: "dv_license",
+      title: "验证 license 到期",
+      months: [2],
+      weight: 1,
+      text: "验证环境的关键 license 到期，回归队列开始堆积。采购说续费要走流程。",
+      options: [
+        { label: "加急续费", effects: { budget: -60, progress: { dv: 8 } }, result: "license 续上了，回归重新跑起来。" },
+        { label: "先蹭别的项目", effects: { progress: { dv: -5 }, morale: -3 }, result: "license 暂时能用，但随时可能被踢下线。" },
+        { label: "停几天", effects: { progress: { dv: -8 }, delay: 1 }, result: "验证停摆，窗口滑了一周。" }
+      ]
+    },
+    {
+      id: "dft_fail",
+      title: "DFT 插入失败",
+      months: [3],
+      weight: 1,
+      text: "中端插入 DFT 后发现扫描链覆盖不足，量产测试会有盲区。",
+      options: [
+        { label: "返工 DFT", effects: { progress: { midend: -5 }, quality: { midend: 5 }, budget: -30 }, result: "扫描链补上了，中端进度受影响。" },
+        { label: "先接受", effects: { quality: { midend: -3 }, flags: ["dft_gap"] }, result: "DFT 覆盖不足，量产测试风险上升。" },
+        { label: "找外包补", effects: { budget: -45, progress: { midend: 5 } }, result: "外包团队接手了一部分 DFT，预算又少了一截。" }
+      ]
+    },
+    {
+      id: "power_budget",
+      title: "功耗超标",
+      months: [3],
+      weight: 1,
+      text: "中端初评功耗超预算 18%，封装和散热都要重新评估。",
+      options: [
+        { label: "优化低功耗", effects: { progress: { midend: -5 }, quality: { midend: 5 }, budget: -30 }, result: "功耗压下去一点，进度也慢了一点。" },
+        { label: "降频", effects: { market: -6, quality: { midend: 3 } }, result: "频率降了，功耗好看了，客户不太高兴。" },
+        { label: "接受风险", effects: { quality: { midend: -3 }, flags: ["power_risk"] }, result: "你把功耗风险留到了 signoff。" }
+      ]
+    },
+    {
+      id: "rtl_rework",
+      title: "RTL 0.75 返工",
+      months: [3],
+      weight: 1,
+      text: "中端综合发现 RTL 0.75 里有一个模块接口写错了，必须返工。",
+      options: [
+        { label: "停下来修", effects: { progress: { rtl: -5 }, bugs: -8, delay: 1 }, result: "bug 修了，窗口少了一周。" },
+        { label: "先冻结", effects: { quality: { rtl: -5 }, bugs: 5 }, result: "版本冻结了，bug 留到后面。" },
+        { label: "加人修", effects: { budget: -45, progress: { rtl: 5 }, morale: -3 }, result: "临时加人，进度补回来一点，团队开始疲惫。" }
+      ]
+    },
+    {
+      id: "coverage_audit",
+      title: "覆盖率对不上",
+      months: [4],
+      weight: 1,
+      text: "验证报的覆盖率和第三方工具对不上，中间差了 9 个点。",
+      options: [
+        { label: "第三方审计", effects: { budget: -30, coverage: 5, quality: { dv: 3 } }, result: "审计发现了重复用例，覆盖率挤掉了一些水分。" },
+        { label: "相信验证团队", effects: { coverage: -5, flags: ["coverage_gap"] }, result: "你选择相信报表，风险留到了回片。" },
+        { label: "补定向用例", effects: { budget: -45, coverage: 8 }, result: "补了一批定向用例，覆盖率终于对上了。" }
+      ]
+    },
+    {
+      id: "clock_tree",
+      title: "时钟树没收敛",
+      months: [4],
+      weight: 1,
+      text: "后端发现时钟树 skew 偏大，高频 corner 可能过不去。",
+      options: [
+        { label: "重做时钟树", effects: { progress: { backend: -5 }, quality: { backend: 5 }, budget: -30 }, result: "时钟树重做，后端进度慢了一点。" },
+        { label: "接受风险", effects: { quality: { backend: -5 }, flags: ["clock_risk"] }, result: "你选择先保进度，时钟风险留到了 signoff。" },
+        { label: "先优化再跑", effects: { progress: { backend: 2 }, quality: { backend: -2 }, delay: 1 }, result: "优化了一版，窗口滑了一周。" }
+      ]
+    },
+    {
+      id: "customer_demo",
+      title: "客户要来看 demo",
+      months: [4],
+      weight: 1,
+      text: "客户突然要来现场看 demo，但验证还有几个 corner 没跑完。",
+      options: [
+        { label: "硬着头皮演示", effects: { market: 5, morale: -3, budget: -20 }, result: "demo 跑通了，团队在后台捏了一把汗。" },
+        { label: "藏起问题", effects: { market: 3, flags: ["known_issue"] }, result: "客户没发现问题，你开始担心回片。" },
+        { label: "先准备再演", effects: { progress: { dv: -3 }, quality: { dv: 3 }, budget: -20 }, result: "多准备了一天，demo 稳了一点。" }
+      ]
+    },
+    {
+      id: "eco_hell",
+      title: "ECO 地狱",
+      months: [5],
+      weight: 1,
+      text: "RTL freeze 后连续出现 ECO，每个都说是最后一个。",
+      options: [
+        { label: "全部修掉", effects: { progress: { rtl: -5 }, bugs: -8, delay: 1 }, result: "ECO 修完了，窗口又少了一周。" },
+        { label: "只修高风险", effects: { bugs: 5, flags: ["eco_risk"] }, result: "低风险 ECO 被 waive，风险留到了回片。" },
+        { label: "砍功能", effects: { market: -5, bugs: -5 }, result: "砍掉一个功能，ECO 少了一半。" }
+      ]
+    },
+    {
+      id: "team_burnout",
+      title: "团队开始疲劳",
+      months: [5],
+      weight: 1,
+      text: "连续加班后，团队开始出现低级错误。",
+      options: [
+        { label: "强制休息", effects: { morale: 8, progress: { rtl: -3, dv: -3, midend: -3, backend: -3 } }, result: "团队休息了两天，进度慢了一点。" },
+        { label: "再顶一顶", effects: { morale: -8, progress: { rtl: 5, dv: 5, midend: 5, backend: 5 }, quality: { rtl: -3, backend: -3 } }, result: "进度上去了，错误率也上去了。" },
+        { label: "发奖金", effects: { budget: -45, morale: 5 }, result: "奖金到账，团队情绪好了一点。" }
+      ]
+    },
+    {
+      id: "foundry_yield",
+      title: "代工厂良率预警",
+      months: [5],
+      weight: 1,
+      text: "代工厂说这个工艺角的良率 margin 偏薄，量产爬坡可能不顺。",
+      options: [
+        { label: "加钱保 margin", effects: { budget: -60, quality: { backend: 3 } }, result: "加钱换了一点 margin，财务又发来邮件。" },
+        { label: "接受", effects: { flags: ["yield_risk"], market: -3 }, result: "你选择接受，量产风险留到了后面。" },
+        { label: "换 corner", effects: { budget: -30, delay: 1 }, result: "换 corner 后窗口滑了一周。" }
+      ]
+    },
+    {
+      id: "signoff_dispute",
+      title: "Signoff 清单有争议",
+      months: [6],
+      weight: 1,
+      text: "签核会上，后端说有几条违规可以 waive，验证说有一条不能放。",
+      options: [
+        { label: "修掉争议项", effects: { budget: -45, quality: { backend: 5 }, delay: 1 }, result: "争议项修掉了，窗口又紧了一点。" },
+        { label: "签字 waive", effects: { flags: ["signoff_risk"], quality: { backend: -2 } }, result: "你签了字，风险带到了硅上。" },
+        { label: "升级评审", effects: { morale: -3, budget: -20 }, result: "评审升级了，至少责任分清楚了。" }
+      ]
+    },
+    {
+      id: "customer_push",
+      title: "客户要求提前发布",
+      months: [6],
+      weight: 1,
+      text: "客户要求提前发布，销售希望“先发一版再说”。",
+      options: [
+        { label: "逼团队提前", effects: { progress: { dv: 5, midend: 5, backend: 5 }, morale: -6, quality: { dv: -3, backend: -3 } }, result: "进度被硬拉上去，质量开始松动。" },
+        { label: "砍功能保发布", effects: { market: -6, progress: { dv: 3, midend: 3, backend: 3 } }, result: "砍掉两个功能，客户勉强接受。" },
+        { label: "拒绝", effects: { market: -3 }, result: "你拒绝了提前发布，客户开始找备选。" }
+      ]
+    },
+    {
+      id: "late_ip",
+      title: "最后一个 IP 更新",
+      months: [6],
+      weight: 1,
+      text: "关键 IP 供应商在流片前发来一个更新，说修了一个 corner bug。",
+      options: [
+        { label: "集成更新", effects: { progress: { rtl: -3 }, quality: { rtl: 3 }, delay: 1 }, result: "更新集成了，窗口滑了一周。" },
+        { label: "不集成", effects: { flags: ["ip_risk"] }, result: "你决定不集成，风险留给回片。" },
+        { label: "打补丁", effects: { budget: -30, quality: { rtl: 2 } }, result: "打了个 patch，预算又少了一点。" }
+      ]
+    }
+  ];
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+  <script>
+(function (global) {
+  var GC = (global.GameContent = global.GameContent || {});
+
+  function hasTrait(team, trait) {
+    return team && team.content.hidden.traits.indexOf(trait) >= 0;
+  }
+
+  GC.waivers = [
+    {
+      id: "hold_scan",
+      category: "时序",
+      label: "scan chain hold violation -18ps",
+      hint: "scan chain 上的 hold，测试模式可能起不来。",
+      trueRisk: 0.8,
+      fixCost: 75,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.teams.backend.quality < 78 || s.teams.rtl.quality < 65;
+      }
+    },
+    {
+      id: "setup_test",
+      category: "时序",
+      label: "test mode setup violation -12ps",
+      hint: "只影响 test mode，功能路径余量看起来还可以。",
+      trueRisk: 0.25,
+      fixCost: 45,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.teams.backend.progress < 95;
+      }
+    },
+    {
+      id: "drc_density",
+      category: "DRC",
+      label: "metal density 12 处",
+      hint: "密度违规，代工厂可能要求 waiver。",
+      trueRisk: 0.45,
+      fixCost: 60,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.teams.backend.quality < 82;
+      }
+    },
+    {
+      id: "lvs_via",
+      category: "LVS",
+      label: "LVS missing via 3 处",
+      hint: "LVS 没过，通常不是小事。",
+      trueRisk: 0.75,
+      fixCost: 90,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.teams.backend.quality < 72 || hasTrait(s.teams.backend, "drc_risk");
+      }
+    },
+    {
+      id: "power_over",
+      category: "功耗",
+      label: "功耗超预算 22%",
+      hint: "动态功耗超标，封装和散热要重新评估。",
+      trueRisk: 0.6,
+      fixCost: 120,
+      fixWeeks: 2,
+      requires: function (s) {
+        return s.teams.midend.quality < 78 || s.project.requirements.power > 0.8;
+      }
+    },
+    {
+      id: "dft_coverage",
+      category: "DFT",
+      label: "DFT 覆盖率 86%",
+      hint: "量产测试覆盖不足，良率会受影响。",
+      trueRisk: 0.55,
+      fixCost: 90,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.teams.midend.progress < 88;
+      }
+    },
+    {
+      id: "func_bug",
+      category: "功能",
+      label: "DMA burst 死锁",
+      hint: "已知功能 bug，软件可能绕不过去。",
+      trueRisk: 0.8,
+      fixCost: 120,
+      fixWeeks: 2,
+      requires: function (s) {
+        return s.bugs > 6 || s.flags.known_bug;
+      }
+    },
+    {
+      id: "coverage_gap",
+      category: "验证",
+      label: "覆盖率 88%，3 个 corner 未覆盖",
+      hint: "没覆盖到的 corner，可能正好是硅上的坑。",
+      trueRisk: 0.5,
+      fixCost: 75,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.coverage < 92 || hasTrait(s.teams.dv, "coverage_theater");
+      }
+    },
+    {
+      id: "ir_drop",
+      category: "电源",
+      label: "IR drop 超 8%",
+      hint: "电源网络偏弱，峰值负载下可能掉压。",
+      trueRisk: 0.65,
+      fixCost: 90,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.teams.backend.quality < 68;
+      }
+    },
+    {
+      id: "clock_tree",
+      category: "时序",
+      label: "clock tree skew 偏大",
+      hint: "时钟树还没完全收敛，高频 corner 有风险。",
+      trueRisk: 0.6,
+      fixCost: 75,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.teams.backend.quality < 75;
+      }
+    },
+    {
+      id: "yield_margin",
+      category: "良率",
+      label: "良率 margin 不足 3%",
+      hint: "工艺角 margin 偏薄，量产良率可能不达标。",
+      trueRisk: 0.5,
+      fixCost: 90,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.teams.midend.quality < 70;
+      }
+    },
+    {
+      id: "signoff_gap",
+      category: "Signoff",
+      label: "signoff 清单缺 3 项",
+      hint: "清单没齐就流片，等于把未知留给硅。",
+      trueRisk: 0.6,
+      fixCost: 90,
+      fixWeeks: 1,
+      requires: function (s) {
+        return s.signoffScore < 65;
+      }
+    },
+    {
+      id: "eco_gap",
+      category: "ECO",
+      label: "ECO 清单还有 3 项",
+      hint: "RTL 团队的 lint 和 ECO 习惯，通常会在流片前一起还债。",
+      trueRisk: 0.6,
+      fixCost: 90,
+      fixWeeks: 1,
+      requires: function (s) {
+        return hasTrait(s.teams.rtl, "eco_prone") || hasTrait(s.teams.rtl, "lint_dirty");
+      }
+    },
+    {
+      id: "coverage_theater",
+      category: "验证",
+      label: "覆盖率 91%，定向用例不足",
+      hint: "数字很好看，但很多是重复用例。",
+      trueRisk: 0.55,
+      fixCost: 75,
+      fixWeeks: 1,
+      requires: function (s) {
+        return hasTrait(s.teams.dv, "coverage_theater");
+      }
+    },
+    {
+      id: "low_power_gap",
+      category: "功耗",
+      label: "低功耗方案只套了模板",
+      hint: "新工艺下模板不一定管用，峰值功耗会暴露。",
+      trueRisk: 0.6,
+      fixCost: 105,
+      fixWeeks: 2,
+      requires: function (s) {
+        return hasTrait(s.teams.midend, "low_power_gap");
+      }
+    },
+    {
+      id: "esd",
+      category: "可靠性",
+      label: "ESD 余量 1.8kV（目标 2kV）",
+      hint: "封装厂可能接受，可靠性部门不一定。",
+      trueRisk: 0.3,
+      fixCost: 30,
+      fixWeeks: 1,
+      requires: function () {
+        return true;
+      }
+    }
+  ];
+
+  GC.waiverFillers = [
+    {
+      id: "esd_fill",
+      category: "可靠性",
+      label: "ESD 余量 1.8kV（目标 2kV）",
+      hint: "封装厂可能接受，可靠性部门不一定。",
+      trueRisk: 0.3,
+      fixCost: 30,
+      fixWeeks: 1
+    },
+    {
+      id: "setup_fill",
+      category: "时序",
+      label: "test mode setup violation -12ps",
+      hint: "只影响 test mode，功能路径余量看起来还可以。",
+      trueRisk: 0.25,
+      fixCost: 45,
+      fixWeeks: 1
+    },
+    {
+      id: "drc_fill",
+      category: "DRC",
+      label: "metal density 8 处",
+      hint: "密度违规，代工厂可能要求 waiver。",
+      trueRisk: 0.4,
+      fixCost: 60,
+      fixWeeks: 1
+    }
+  ];
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+  <script>
+(function (global) {
+  var GC = (global.GameContent = global.GameContent || {});
+
+  GC.endings = [
+    {
+      id: "cash_crisis",
+      title: "资金链断裂",
+      grade: "D",
+      subtitle: "芯片还在等产能，公司先等来了催款函",
+      body:
+        "流片回来了，bring-up 也过了。可量产预付款、封测账期和供应商催款同时到期，银行抽贷，资金链断了。芯片还在等产能，团队已经开始投简历。",
+      condition: function (e) {
+        return e.cashCrash === true;
+      }
+    },
+    {
+      id: "brick",
+      title: "砖头",
+      grade: "D",
+      subtitle: "流片回来，bring-up 不亮",
+      body:
+        "实验室安静得可怕。示波器上什么都没有，软件团队问“是不是电源没接”。你开始怀疑人生，也怀疑 RTL。",
+      condition: function (e) {
+        return !e.works && e.condition === "dead";
+      }
+    },
+    {
+      id: "recall",
+      title: "召回危机",
+      grade: "D",
+      subtitle: "点亮了，但客户现场炸了",
+      body:
+        "芯片点亮了，但严重 bug 在客户现场爆发。召回、公关、复盘，一个都少不了。你第一次觉得“点亮”不等于“成功”。",
+      condition: function (e) {
+        return e.works && e.severe === "fatal";
+      }
+    },
+    {
+      id: "limping",
+      title: "跛脚芯片",
+      grade: "C",
+      subtitle: "能用，但不好用",
+      body:
+        "芯片没有完全跑起来：部分模块无响应，或者 errata 比预期多，量产受限。软件团队开始写 workaround，客户问“下一代什么时候”。",
+      condition: function (e) {
+        return (!e.works && e.condition === "partial") || (e.works && (e.severe === "major" || !e.mp));
+      }
+    },
+    {
+      id: "narcissism",
+      title: "技术自嗨",
+      grade: "B",
+      subtitle: "叫好，但不叫座",
+      body:
+        "技术指标很漂亮，但市场窗口过了。销售说“叫好不叫座”，老板说“下次早点”。你保住了技术尊严，没保住项目奖金。",
+      condition: function (e) {
+        return e.works && e.severe !== "fatal" && e.mp && e.market < 40;
+      }
+    },
+    {
+      id: "hero",
+      title: "天选 PM",
+      grade: "S",
+      subtitle: "一次点亮，量产，窗口命中",
+      body:
+        "芯片一次点亮，量产顺利，客户在发布会上点名感谢你。你只知道这六个月没人离职，而且你已经不记得上次睡整觉是什么时候。",
+      condition: function (e) {
+        return (
+          e.grade === "S" &&
+          e.works &&
+          e.severe !== "fatal" &&
+          e.severe !== "major" &&
+          e.mp &&
+          e.market >= 65 &&
+          e.onTime
+        );
+      }
+    },
+    {
+      id: "narrow",
+      title: "惊险过关",
+      grade: "D",
+      subtitle: "项目交付了，代价不小",
+      body:
+        "芯片终于量产，但窗口、预算、团队都付出了代价。老板说“结果是好的”，你听不出这是表扬还是安慰。",
+      condition: function (e) {
+        return e.works && e.mp && e.score < 70;
+      }
+    },
+    {
+      id: "steady",
+      title: "稳健交付",
+      grade: "A",
+      subtitle: "没有奇迹，也没有灾难",
+      body:
+        "芯片能用，量产爬坡慢一点，市场反应中规中矩。至少没有召回。老板说“不错”，你听不出是表扬还是别的意思。",
+      condition: function () {
+        return true;
+      }
+    }
+  ];
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+  <script>
+(function (global) {
+  var GC = (global.GameContent = global.GameContent || {});
+  var RNG = global.RNG;
+
+  var ACTIONS = [
+    {
+      id: "overtime",
+      name: "加班冲刺",
+      cost: 60,
+      morale: -8,
+      needsTarget: true,
+      desc: "指定方向本月进度 +15，质量 -3。"
+    },
+    {
+      id: "verify",
+      name: "加验证",
+      cost: 90,
+      morale: -3,
+      needsTarget: false,
+      desc: "验证进度 +10，bug -8。"
+    },
+    {
+      id: "ip",
+      name: "买 IP / 外包",
+      cost: 150,
+      morale: 0,
+      needsTarget: true,
+      desc: "指定方向进度 +20，质量 -2。"
+    },
+    {
+      id: "cut",
+      name: "砍需求",
+      cost: 0,
+      morale: -5,
+      needsTarget: false,
+      once: true,
+      desc: "所有活跃方向 +5，市场 -8（限一次）。"
+    },
+    {
+      id: "paint",
+      name: "画饼",
+      cost: 0,
+      morale: 0,
+      needsTarget: true,
+      desc: "选一个团队画饼：平均 3 年以内士气 +10，4–5 年 +3，6 年以上 -3。"
+    },
+    {
+      id: "raise",
+      name: "加薪",
+      cost: 0,
+      costLabel: "月薪+10%",
+      morale: 12,
+      needsTarget: false,
+      desc: "全员月薪永久 +10%，士气 +12。"
+    },
+    {
+      id: "teambuild",
+      name: "团建",
+      cost: 45,
+      morale: 0,
+      needsTarget: false,
+      desc: "花 45 万，65% 成功士气 +15；35% 翻车士气 -4。"
+    },
+    {
+      id: "audit",
+      name: "第三方审计",
+      cost: 30,
+      morale: 0,
+      needsTarget: true,
+      desc: "指定方向本月报告真实化。"
+    },
+    {
+      id: "skip",
+      name: "什么都不做",
+      cost: 0,
+      morale: 0,
+      needsTarget: false,
+      desc: "本月不做额外动作，直接推进。"
+    }
+  ];
+
+  var TEAMBUILD_WINS = [
+    "团建很成功，大家暂时忘了流片，士气 +15。",
+    "烤肉和奶茶都到位，团队表示还能再撑一个月，士气 +15。",
+    "这次团建居然没人提加班，士气 +15。",
+    "破冰游戏没冷场，团队群里第一次没人发“收到”，士气 +15。"
+  ];
+
+  var TEAMBUILD_FAILS = [
+    "团建选了密室逃脱，结果大家在消防通道里迷路半小时，士气 -4。",
+    "团建去漂流，项目经理的手机和团队士气一起掉进水里，士气 -4。",
+    "团建玩剧本杀，两个模块负责人为“谁是凶手”吵到凌晨，士气 -4。",
+    "团建订了网红餐厅，排队两小时上菜十分钟，回来更累了，士气 -4。",
+    "团建爬山，HR 说“不是旅游是拉练”，士气 -4。",
+    "团建唱 K，麦霸是隔壁组老板，团队全程在角落吃果盘，士气 -4。"
+  ];
+
+  var QUOTES = {
+    arch: {
+      opt: ["架构评审一次过，放心。", "模块划分很干净，后面不会返工。"],
+      neu: ["架构基本定了，还有两个接口在收尾。"],
+      cau: ["还有两个模块的接口没对齐，现在开 RTL 就是赌。"]
+    },
+    algo: {
+      opt: ["算法指标很漂亮，定点化再说。", "模型没问题，性能余量很大。"],
+      neu: ["算法模型跑通了，定点误差还在看。"],
+      cau: ["仿真好看不代表硅上能用，定点误差还没验。"]
+    },
+    rtl: {
+      opt: ["RTL 0.9 已交付，剩下的都是小问题。", "按计划推进，前端这边没风险。"],
+      neu: ["RTL 在收敛，还有几个模块没完全清干净。"],
+      cau: ["还有三个 corner 没跑，我不建议现在冻结。"]
+    },
+    dv: {
+      opt: ["覆盖率在涨，问题不大。", "回归基本稳定，剩下都是边角料。"],
+      neu: ["验证在推进，覆盖率还没到 target。"],
+      cau: ["覆盖率不够，还有 corner 没跑，别 freeze。"]
+    },
+    midend: {
+      opt: ["综合初跑很干净，时序没问题。", "DFT 插完了，功耗在预算内。"],
+      neu: ["综合跑通了，时序和功耗还在调。"],
+      cau: ["setup violation 不少，功耗也超了。"]
+    },
+    backend: {
+      opt: ["后端按计划推进，DRC 快清了。", "时序收敛得不错，别担心。"],
+      neu: ["后端在迭代，时序还没完全收敛。"],
+      cau: ["布线拥塞，时序还没收敛，别催。"]
+    }
+  };
+
+  function clamp(v, lo, hi) {
+    return Math.max(lo, Math.min(hi, v));
+  }
+
+  function pick(arr, rng) {
+    return arr[Math.floor(rng() * arr.length)];
+  }
+
+  function getTeam(state, direction) {
+    return state.teams[direction];
+  }
+
+  function getActiveDirections(state, month) {
+    var m = month || state.month;
+    return GC.directions.filter(function (d) {
+      return d.active.indexOf(m) >= 0;
+    });
+  }
+
+  function isDirectionActive(state, direction, month) {
+    var d = GC.directions.find(function (x) {
+      return x.id === direction;
+    });
+    return !!d && d.active.indexOf(month || state.month) >= 0;
+  }
+
+  function totalSalary(state) {
+    return Object.keys(state.teams).reduce(function (sum, key) {
+      return sum + state.teams[key].content.salary;
+    }, 0);
+  }
+
+  function prepareMonth(state) {
+    state.actionUsed = false;
+    state.auditDirection = null;
+    state.lastAction = null;
+    state.pendingEvents = [];
+    state.currentReport = null;
+    state.phase = "planning";
+  }
+
+  function jitterTeamContent(content, seed) {
+    var rng = RNG.mulberry32(RNG.hashSeed(seed + ":team:" + content.id));
+    var h = content.hidden;
+    var hidden = {};
+    Object.keys(h).forEach(function (key) {
+      hidden[key] = h[key];
+    });
+    hidden.traits = h.traits.slice();
+    hidden.skill = clamp(h.skill + (rng() * 2 - 1) * 6, 30, 95);
+    hidden.quality = clamp(h.quality + (rng() * 2 - 1) * 6, 30, 95);
+    hidden.speed = clamp(h.speed + (rng() * 2 - 1) * 6, 30, 95);
+    hidden.collab = clamp(h.collab + (rng() * 2 - 1) * 5, 25, 95);
+    hidden.stability = clamp(h.stability + (rng() * 2 - 1) * 5, 25, 95);
+    hidden.bias = clamp(h.bias + (rng() * 2 - 1) * 4, -25, 25);
+    return Object.assign({}, content, { hidden: hidden });
+  }
+
+  function createRun(opts) {
+    opts = opts || {};
+    var seed = String(opts.seed || RNG.randomSeed());
+    var rng = RNG.mulberry32(RNG.hashSeed(seed));
+    var project = GC.projects.find(function (p) {
+      return p.id === opts.projectId;
+    }) || GC.projects[0];
+
+    var selected = {};
+    (opts.teamIds || []).forEach(function (id) {
+      var content = GC.candidateTeams.find(function (t) {
+        return t.id === id;
+      });
+      if (content) selected[content.direction] = content;
+    });
+
+    var teams = {};
+    GC.directions.forEach(function (d) {
+      var content = selected[d.id];
+      if (!content) return;
+      teams[d.id] = {
+        direction: d.id,
+        content: jitterTeamContent(content, seed),
+        progress: 0,
+        quality: 50,
+        depNotes: [],
+        lastGain: 0
+      };
+    });
+
+    var missing = GC.directions.filter(function (d) {
+      return !teams[d.id];
+    });
+    if (missing.length) {
+      return { ok: false, message: "还有方向没有选团队：" + missing.map(function (d) { return d.name; }).join("、") };
+    }
+
+    var state = {
+      seed: seed,
+      rng: rng,
+      project: project,
+      month: 1,
+      phase: "planning",
+      teams: teams,
+      initialBudget: project.budget - (opts.backgroundCheckCost || 0),
+      budget: project.budget - (opts.backgroundCheckCost || 0),
+      morale: 70,
+      bugs: 0,
+      coverage: 0,
+      delayWeeks: 0,
+      marketPenalty: 0,
+      specScore: 0,
+      signoffScore: 0,
+      flags: {},
+      usedEvents: [],
+      delayed: [],
+      pendingEvents: [],
+      currentReport: null,
+      lastTeamReports: {},
+      lastGates: null,
+      backgroundChecks: opts.backgroundChecks || [],
+      backgroundWarningsUsed: [],
+      teamEventsUsed: [],
+      actionUsed: false,
+      auditDirection: null,
+      lastAction: null,
+      waivers: [],
+      evaluation: null,
+      log: [],
+      stats: { monthsPlayed: 0, actionsUsed: 0, eventsResolved: 0, backgroundChecks: (opts.backgroundChecks || []).length }
+    };
+
+    prepareMonth(state);
+    state.log.push("M1 项目启动：" + seed + "（" + project.name + " 方向），6 个方向团队已锁定。");
+    return state;
+  }
+
+  function chooseAction(state, actionId, targetDirection) {
+    if (state.phase !== "planning") return { ok: false, message: "现在不是排兵阶段。" };
+    if (state.actionUsed) return { ok: false, message: "本月已经做过决策了。" };
+    var action = ACTIONS.find(function (a) {
+      return a.id === actionId;
+    });
+    if (!action) return { ok: false, message: "没有这个决策。" };
+    if (state.budget < action.cost) return { ok: false, message: "预算不够。" };
+    if (action.once && state.flags["used_" + action.id]) return { ok: false, message: "这个决策已经用过了。" };
+    if (action.id === "verify" && !isDirectionActive(state, "dv")) return { ok: false, message: "验证还没进场。" };
+    if (action.needsTarget) {
+      if (!targetDirection || !isDirectionActive(state, targetDirection)) {
+        return { ok: false, message: "请选择一个本月活跃的方向。" };
+      }
+    }
+
+    var before = {
+      budget: state.budget,
+      morale: state.morale,
+      bugs: state.bugs,
+      coverage: state.coverage,
+      delayWeeks: state.delayWeeks,
+      marketPenalty: state.marketPenalty
+    };
+    var beforeTeam = targetDirection
+      ? { progress: state.teams[targetDirection].progress, quality: state.teams[targetDirection].quality }
+      : null;
+    var beforeDv = state.teams.dv
+      ? { progress: state.teams.dv.progress }
+      : null;
+
+    state.budget -= action.cost;
+    state.morale = clamp(state.morale + action.morale, 0, 100);
+    state.actionUsed = true;
+    state.stats.actionsUsed++;
+    state.lastAction = { id: action.id, name: action.name, target: targetDirection || null };
+    if (action.once) state.flags["used_" + action.id] = true;
+
+    var note = "";
+    var team = targetDirection ? state.teams[targetDirection] : null;
+
+    if (action.id === "overtime") {
+      var t1 = state.teams[targetDirection];
+      var bonus = 15;
+      var qualityPenalty = 3;
+      if (hasTrait(t1, "eager")) {
+        bonus += 7;
+        qualityPenalty = 5;
+        note = "年轻团队能加班，进度 +" + bonus + "。";
+      }
+      if (hasTrait(t1, "no_overtime")) {
+        bonus = 5;
+        qualityPenalty = 1;
+        state.morale = clamp(state.morale + 4, 0, 100);
+        note = "团队拒绝加班，进度只 +5。";
+      }
+      if (hasTrait(t1, "not_manageable")) {
+        bonus = Math.max(1, Math.round(bonus * 0.5));
+        state.morale = clamp(state.morale - 3, 0, 100);
+        note = "团队不太听指挥，效果减半。";
+      }
+      t1.progress = clamp(t1.progress + bonus, 0, 100);
+      t1.quality = clamp(t1.quality - qualityPenalty, 20, 100);
+      if (t1.content.hidden.stability < 50) state.morale = clamp(state.morale - 4, 0, 100);
+    } else if (action.id === "verify") {
+      var dv = state.teams.dv;
+      var verifyBonus = 10;
+      var bugCut = 8;
+      if (hasTrait(dv, "eager")) {
+        verifyBonus = 15;
+        bugCut = 12;
+        note = "外包验证能加班，回归效果提升。";
+      }
+      if (hasTrait(dv, "no_overtime")) {
+        verifyBonus = 5;
+        bugCut = 4;
+        note = "验证团队拒绝加班，回归效果减半。";
+      }
+      if (hasTrait(dv, "not_manageable")) {
+        verifyBonus = Math.max(1, Math.round(verifyBonus * 0.5));
+        bugCut = Math.max(1, Math.round(bugCut * 0.5));
+        note = "验证团队不太听指挥，回归效果减半。";
+      }
+      dv.progress = clamp(dv.progress + verifyBonus, 0, 100);
+      state.bugs = Math.max(0, state.bugs - bugCut);
+    } else if (action.id === "ip") {
+      var t2 = state.teams[targetDirection];
+      var ipBonus = 20;
+      if (hasTrait(t2, "not_manageable")) {
+        ipBonus = 10;
+        note = "团队不太听指挥，外包集成只完成一半。";
+      }
+      t2.progress = clamp(t2.progress + ipBonus, 0, 100);
+      t2.quality = clamp(t2.quality - 2, 20, 100);
+    } else if (action.id === "cut") {
+      getActiveDirections(state).forEach(function (d) {
+        state.teams[d.id].progress = clamp(state.teams[d.id].progress + 5, 0, 100);
+      });
+      state.marketPenalty += 8;
+      state.flags.cut_scope = true;
+    } else if (action.id === "paint") {
+      var paintTeam = state.teams[targetDirection];
+      var years = paintTeam.content.avgYears;
+      var paintGain = years <= 3 ? 10 : years <= 5 ? 3 : -3;
+      state.morale = clamp(state.morale + paintGain, 0, 100);
+      if (years <= 3) {
+        note = "平均 " + years + " 年，年轻人真信了，士气 +10。";
+      } else if (years <= 5) {
+        note = "平均 " + years + " 年，画饼勉强咽下去了，士气 +3。";
+      } else {
+        note = "平均 " + years + " 年，老油条说这饼没放盐，士气 -3。";
+      }
+    } else if (action.id === "raise") {
+      var beforePayroll = totalSalary(state);
+      Object.keys(state.teams).forEach(function (key) {
+        var raiseTeam = state.teams[key];
+        raiseTeam.content.salary = Math.round(raiseTeam.content.salary * 1.1 * 10) / 10;
+      });
+      note =
+        "全员月薪永久 +10%，月薪合计 +" +
+        Math.round((totalSalary(state) - beforePayroll) * 10) / 10 +
+        " 万/月，士气 +12。";
+    } else if (action.id === "teambuild") {
+      if (state.rng() < 0.65) {
+        state.morale = clamp(state.morale + 15, 0, 100);
+        note = pick(TEAMBUILD_WINS, state.rng);
+      } else {
+        state.morale = clamp(state.morale - 4, 0, 100);
+        note = pick(TEAMBUILD_FAILS, state.rng);
+      }
+    } else if (action.id === "audit") {
+      state.auditDirection = targetDirection;
+      if (hasTrait(team, "not_manageable")) {
+        state.morale = clamp(state.morale - 5, 0, 100);
+        note = "团队对审计有情绪，士气 -5。";
+      }
+    }
+
+    function signed(n) {
+      return (n >= 0 ? "+" : "") + Math.round(n);
+    }
+    var changes = [];
+    if (targetDirection && beforeTeam) {
+      var pd = state.teams[targetDirection].progress - beforeTeam.progress;
+      var qd = state.teams[targetDirection].quality - beforeTeam.quality;
+      if (Math.abs(pd) >= 0.5) changes.push("进度 " + signed(pd));
+      if (Math.abs(qd) >= 0.5) changes.push("质量 " + signed(qd));
+    }
+    if (action.id === "verify" && beforeDv) {
+      var vd = state.teams.dv.progress - beforeDv.progress;
+      if (Math.abs(vd) >= 0.5) changes.push("验证进度 " + signed(vd));
+    }
+    if (action.id === "cut") changes.push("所有活跃方向 +5");
+    if (action.id === "audit") changes.push("本月报告已审计");
+    if (action.id === "raise") changes.push("全员月薪 +10%");
+    var budgetDelta = state.budget - before.budget;
+    if (Math.abs(budgetDelta) >= 0.5) changes.push("预算 " + signed(budgetDelta) + " 万");
+    var moraleDelta = state.morale - before.morale;
+    if (Math.abs(moraleDelta) >= 0.5) changes.push("士气 " + signed(moraleDelta));
+    var bugDelta = state.bugs - before.bugs;
+    if (Math.abs(bugDelta) >= 0.5) changes.push("bug " + signed(bugDelta));
+    var coverageDelta = state.coverage - before.coverage;
+    if (Math.abs(coverageDelta) >= 0.5) changes.push("覆盖 " + signed(coverageDelta));
+    var delayDelta = state.delayWeeks - before.delayWeeks;
+    if (Math.abs(delayDelta) >= 0.5) changes.push("延迟 " + signed(delayDelta) + " 周");
+    var marketDelta = state.marketPenalty - before.marketPenalty;
+    if (Math.abs(marketDelta) >= 0.5) changes.push("市场 " + signed(-marketDelta));
+    if (!changes.length) changes.push(action.id === "skip" ? "本月不做额外动作" : "已记录");
+
+    var result = {
+      action: action.name,
+      actionId: action.id,
+      target: targetDirection || null,
+      targetName: targetDirection ? state.teams[targetDirection].content.name : null,
+      changes: changes,
+      note: note || ""
+    };
+    state.lastAction.result = result;
+    if (note) state.lastAction.note = note;
+    state.log.push(
+      "M" +
+        state.month +
+        " 决策：" +
+        action.name +
+        (targetDirection ? "（" + state.teams[targetDirection].content.name + "）" : "") +
+        "。" +
+        (note ? " " + note : "")
+    );
+    return { ok: true, action: action, note: note, result: result };
+  }
+
+  function applyEffects(state, effects) {
+    if (!effects) return;
+    if (effects.budget) state.budget += effects.budget;
+    if (effects.morale) state.morale = clamp(state.morale + effects.morale, 0, 100);
+    if (effects.progress) {
+      Object.keys(effects.progress).forEach(function (k) {
+        if (k === "spec") {
+          ["arch", "algo"].forEach(function (dir) {
+            if (state.teams[dir]) state.teams[dir].progress = clamp(state.teams[dir].progress + effects.progress[k], 0, 100);
+          });
+        } else if (state.teams[k]) {
+          state.teams[k].progress = clamp(state.teams[k].progress + effects.progress[k], 0, 100);
+        }
+      });
+    }
+    if (effects.quality) {
+      Object.keys(effects.quality).forEach(function (k) {
+        if (k === "spec") {
+          ["arch", "algo"].forEach(function (dir) {
+            if (state.teams[dir]) state.teams[dir].quality = clamp(state.teams[dir].quality + effects.quality[k], 20, 100);
+          });
+        } else if (state.teams[k]) {
+          state.teams[k].quality = clamp(state.teams[k].quality + effects.quality[k], 20, 100);
+        }
+      });
+    }
+    if (effects.coverage) state.coverage = clamp(state.coverage + effects.coverage, 0, 100);
+    if (effects.bugs) state.bugs = clamp(state.bugs + effects.bugs, 0, 100);
+    if (effects.delay) state.delayWeeks += effects.delay;
+    if (effects.market) state.marketPenalty += effects.market;
+    if (effects.flags) {
+      effects.flags.forEach(function (f) {
+        state.flags[f] = true;
+      });
+    }
+    if (effects.delayed) {
+      effects.delayed.forEach(function (d) {
+        state.delayed.push({
+          month: state.month + (d.months || 1),
+          effects: d.effects,
+          text: d.text || "上个月埋下的问题发作了。"
+        });
+      });
+    }
+  }
+
+  function applyDelayed(state, report) {
+    var due = state.delayed.filter(function (d) {
+      return d.month <= state.month;
+    });
+    state.delayed = state.delayed.filter(function (d) {
+      return d.month > state.month;
+    });
+    due.forEach(function (d) {
+      applyEffects(state, d.effects);
+      report.notes.push(d.text);
+      state.log.push("M" + state.month + " 遗留问题：" + d.text);
+    });
+  }
+
+  function hasTrait(team, trait) {
+    return team.content.hidden.traits.indexOf(trait) >= 0;
+  }
+
+  function resolveTeam(state, team) {
+    var h = team.content.hidden;
+    var headcountFactor = 0.7 + 0.12 * Math.min(team.content.headcount, 8);
+    var experienceFactor = 0.75 + Math.min(team.content.avgYears, 10) / 20;
+    var skillFactor = 0.55 + h.skill / 200;
+    var moraleFactor = 0.85 + state.morale / 500;
+    var fit = team.content.fit || 1;
+    var variance = hasTrait(team, "outsourced") ? 0.8 + state.rng() * 0.4 : 0.9 + state.rng() * 0.2;
+    var gain = 24 * skillFactor * headcountFactor * experienceFactor * moraleFactor * fit * variance;
+    var depNotes = [];
+
+    if (team.direction === "rtl" && state.teams.arch.progress < 50) {
+      gain *= 0.7;
+      depNotes.push("架构未冻结，RTL 有返工风险。");
+    }
+    if (team.direction === "midend" && state.teams.rtl.progress < 55) {
+      gain *= 0.7;
+      depNotes.push("RTL 未到 0.75，综合反复。");
+    }
+    if (team.direction === "backend" && state.teams.midend.progress < 40) {
+      gain *= 0.7;
+      depNotes.push("中端 netlist 未清，后端返工。");
+    }
+    if (team.direction === "dv" && state.teams.rtl.progress < 25) {
+      gain *= 0.7;
+      depNotes.push("RTL 首版未出，验证空转。");
+    }
+    if (state.flags.arch_review_failed && team.direction === "rtl") gain *= 0.85;
+    if (state.flags.arch_not_frozen && team.direction === "rtl") gain *= 0.85;
+    if (hasTrait(team, "eager")) gain *= 1.04;
+    if (hasTrait(team, "not_manageable")) {
+      gain *= 0.93;
+      depNotes.push("团队对管理有抵触，效率略低。");
+    }
+
+    team.progress = clamp(team.progress + gain, 0, 100);
+
+    var qGain = (h.quality - 50) * 0.25 * experienceFactor;
+    if (hasTrait(team, "not_manageable")) qGain -= 0.5;
+    if (hasTrait(team, "outsourced")) qGain *= 0.8;
+    if (hasTrait(team, "script_driven")) qGain -= 1;
+    if (hasTrait(team, "coverage_theater")) qGain -= 0.5;
+    if (hasTrait(team, "document_heavy")) qGain += 0.5;
+    if (state.flags.m6_crunch) qGain -= 2;
+    team.quality = clamp(team.quality + qGain, 25, 100);
+    team.depNotes = depNotes;
+    team.lastGain = gain;
+
+    if (team.direction === "dv") {
+      state.coverage = clamp(team.progress * 0.9 * (0.75 + team.quality / 200), 0, 100);
+    }
+    return { staff: [], depNotes: depNotes, gain: gain };
+  }
+
+  function applyFlightRisk(state, team, report) {
+    var chance = 0;
+    var loss = 10;
+    if (hasTrait(team, "job_hopper")) {
+      chance = state.morale < 60 ? 0.35 : 0.15;
+      loss = 12;
+    } else if (hasTrait(team, "high_turnover")) {
+      chance = state.morale < 55 ? 0.3 : 0.1;
+      loss = 10;
+    }
+    if (!chance) return;
+    if (state.rng() < chance) {
+      team.progress = Math.max(0, team.progress - loss);
+      team.quality = Math.max(20, team.quality - 4);
+      state.morale = clamp(state.morale - 5, 0, 100);
+      var msg = team.content.name + " 核心成员被挖走，进度 -" + loss + "。";
+      report.notes.push(msg);
+      state.log.push("M" + state.month + " 人事：" + msg);
+    }
+  }
+
+  function makePoachWarning(state, team) {
+    var dir = team.direction;
+    var p3 = {};
+    var q2 = {};
+    var p12 = {};
+    var q4 = {};
+    p3[dir] = -3;
+    q2[dir] = -2;
+    p12[dir] = -12;
+    q4[dir] = -4;
+    return {
+      id: "bg_poach_" + team.content.id,
+      title: "背调预警：核心成员被接触",
+      text: "你背调时发现，" + team.content.name + " 的核心成员最近在接猎头电话。",
+      options: [
+        { label: "提前加薪/安抚（60 万）", effects: { budget: -60, morale: 8 }, result: "人暂时稳住了。" },
+        { label: "准备 backup（30 万）", effects: { budget: -30, progress: p3, quality: q2 }, result: "你让 backup 开始接手关键模块。" },
+        { label: "不理", effects: { progress: p12, quality: q4, morale: -5 }, result: "核心成员还是走了。" }
+      ]
+    };
+  }
+
+  function makeManagementWarning(state, team) {
+    var dir = team.direction;
+    var p3 = {};
+    p3[dir] = -3;
+    var styles = [];
+    if (hasTrait(team, "no_overtime")) styles.push("不加班");
+    if (hasTrait(team, "not_manageable")) styles.push("不服管");
+    return {
+      id: "bg_manage_" + team.content.id,
+      title: "背调提醒：管理风格",
+      text: "你背调时发现，" + team.content.name + " " + styles.join("、") + "。项目排期需要提前处理。",
+      options: [
+        { label: "提前沟通/调整排期", effects: { morale: 4 }, result: "团队情绪稳定。" },
+        { label: "花钱安抚（30 万）", effects: { budget: -30, morale: 8 }, result: "团队情绪明显好转。" },
+        { label: "照常强压", effects: { morale: -5, progress: p3 }, result: "团队开始消极应付。" }
+      ]
+    };
+  }
+
+  function buildBackgroundWarnings(state) {
+    var events = [];
+    var warned = [];
+    getActiveDirections(state).forEach(function (d) {
+      var team = state.teams[d.id];
+      if (state.backgroundChecks.indexOf(team.content.id) < 0) return;
+      if (state.backgroundWarningsUsed.indexOf(team.content.id) >= 0) return;
+      var event = null;
+      if (hasTrait(team, "job_hopper") || hasTrait(team, "high_turnover")) {
+        event = makePoachWarning(state, team);
+      } else if (hasTrait(team, "no_overtime") || hasTrait(team, "not_manageable")) {
+        event = makeManagementWarning(state, team);
+      }
+      if (event) {
+        events.push(event);
+        warned.push(team.content.id);
+        state.backgroundWarningsUsed.push(team.content.id);
+      }
+    });
+    return { events: events, warned: warned };
+  }
+
+  function teamEventKind(state, team) {
+    if (hasTrait(team, "no_overtime") && state.morale < 60) return "refuse";
+    if (hasTrait(team, "eager") && state.morale < 55) return "burnout";
+    if ((hasTrait(team, "outsourced") || hasTrait(team, "high_turnover")) && team.quality < 58) return "quality";
+    if (hasTrait(team, "not_manageable") && state.morale < 55) return "conflict";
+    if (hasTrait(team, "job_hopper") && state.morale < 55) return "poach";
+    if (team.content.headcount <= 3) return "talent";
+    return null;
+  }
+
+  function makeTeamEvent(state, team, kind) {
+    var dir = team.direction;
+    function p(v) {
+      var o = {};
+      o[dir] = v;
+      return o;
+    }
+    if (kind === "refuse") {
+      return {
+        id: "team_refuse_" + team.content.id,
+        title: "团队拒绝加班",
+        text: "你要求 " + team.content.name + " 冲刺，但负责人表示不加班。",
+        options: [
+          { label: "调整排期", effects: { progress: p(-3), morale: 4 }, result: "你调整了排期，团队情绪稳定。" },
+          { label: "强压", effects: { morale: -6, quality: p(-3) }, result: "团队开始消极应付。" },
+          { label: "外包关键模块", effects: { budget: -30, progress: p(3), quality: p(-2) }, result: "外包接走了一部分工作，预算少了一截。" }
+        ]
+      };
+    }
+    if (kind === "burnout") {
+      return {
+        id: "team_burnout_" + team.content.id,
+        title: "年轻团队开始疲劳",
+        text: team.content.name + " 连续加班后，错误率开始上升。",
+        options: [
+          { label: "强制休息", effects: { morale: 8, progress: p(-3) }, result: "团队休息了两天，进度慢了一点。" },
+          { label: "再顶一顶", effects: { progress: p(5), quality: p(-4), morale: -6 }, result: "进度上去了，错误率也上去了。" },
+          { label: "加钱激励", effects: { budget: -30, morale: 6 }, result: "奖金到账，团队情绪好了一点。" }
+        ]
+      };
+    }
+    if (kind === "quality") {
+      return {
+        id: "team_quality_" + team.content.id,
+        title: "外包质量波动",
+        text: team.content.name + " 的交付质量出现波动，返工开始变多。",
+        options: [
+          { label: "加审计", effects: { budget: -30, quality: p(4) }, result: "审计压住了质量波动，预算少了一点。" },
+          { label: "换供应商", effects: { budget: -45, progress: p(-4), quality: p(3) }, result: "换了供应商，交付质量回升，进度受影响。" },
+          { label: "接受", effects: { quality: p(-3), bugs: 4 }, result: "你接受了波动，bug 开始变多。" }
+        ]
+      };
+    }
+    if (kind === "conflict") {
+      return {
+        id: "team_conflict_" + team.content.id,
+        title: "团队不服从管理",
+        text: team.content.name + " 对排期安排有异议，负责人开始不接电话。",
+        options: [
+          { label: "沟通", effects: { morale: 5, progress: p(-2) }, result: "你花了半天沟通，团队至少愿意说话了。" },
+          { label: "强压", effects: { morale: -6, progress: p(3) }, result: "进度上去了，团队开始沉默。" },
+          { label: "冷处理", effects: { morale: -3, quality: p(-2) }, result: "你决定不管，质量开始出现小问题。" }
+        ]
+      };
+    }
+    if (kind === "poach") {
+      return {
+        id: "team_poach_" + team.content.id,
+        title: "核心成员突然提离职",
+        text: team.content.name + " 的核心成员收到猎头 offer，直接来找你谈。",
+        options: [
+          { label: "加薪留人", effects: { budget: -60, morale: 6 }, result: "人留住了，预算少了一截。" },
+          { label: "准备 backup", effects: { budget: -45, progress: p(-4), quality: p(-3) }, result: "你开始安排 backup，短期进度受影响。" },
+          { label: "放走", effects: { progress: p(-12), quality: p(-4), morale: -5 }, result: "核心成员离开，团队士气受挫。" }
+        ]
+      };
+    }
+    return {
+      id: "team_talent_" + team.content.id,
+      title: "关键模块只有一个人",
+      text: team.content.name + " 的关键模块没有 backup，负责人一请假就没人接。",
+      options: [
+        { label: "买 backup", effects: { budget: -30, progress: p(3), quality: p(2) }, result: "backup 到位，至少有人能接。" },
+        { label: "内部培养", effects: { morale: 4, progress: p(-2), quality: p(2) }, result: "你安排内部培养，短期进度慢了一点。" },
+        { label: "硬扛", effects: { flags: ["bus_factor"] }, result: "你决定先硬扛，风险留在了团队身上。" }
+      ]
+    };
+  }
+
+  function buildTeamEvents(state, backgroundWarned) {
+    var active = getActiveDirections(state);
+    for (var i = 0; i < active.length; i++) {
+      var team = state.teams[active[i].id];
+      if (state.teamEventsUsed.indexOf(team.content.id) >= 0) continue;
+      if (state.backgroundChecks.indexOf(team.content.id) >= 0) continue;
+      if (backgroundWarned.indexOf(team.content.id) >= 0) continue;
+      var kind = teamEventKind(state, team);
+      if (!kind) continue;
+      state.teamEventsUsed.push(team.content.id);
+      return { event: makeTeamEvent(state, team, kind), teamId: team.content.id };
+    }
+    return { event: null, teamId: null };
+  }
+
+  function updateBugs(state) {
+    var rtl = state.teams.rtl;
+    var arch = state.teams.arch;
+    var dv = state.teams.dv;
+    if (state.month >= 2 && state.month <= 5 && rtl.progress > 0) {
+      var bugGen = (100 - rtl.quality) * 0.08 + state.project.complexity * 0.2;
+      if (hasTrait(rtl, "lint_dirty")) bugGen *= 1.3;
+      if (hasTrait(rtl, "eco_prone")) bugGen *= 1.15;
+      bugGen += Math.max(0, 70 - arch.quality) * 0.04;
+      state.bugs = clamp(state.bugs + bugGen, 0, 100);
+    }
+    if (state.month >= 2 && dv) {
+      var find = (dv.progress / 100) * (dv.quality / 35) * 3.5 * (0.85 + dv.content.headcount / 30);
+      if (hasTrait(dv, "coverage_theater")) find *= 0.8;
+      state.bugs = clamp(state.bugs - find, 0, 100);
+    }
+  }
+
+  function updateGates(state) {
+    var T = state.teams;
+    state.specScore = (T.arch.progress + T.algo.progress) / 2;
+    var base = Math.min(T.backend.progress, T.midend.progress, T.dv.progress);
+    state.signoffScore = clamp(base * 0.8 + state.coverage * 0.2, 0, 100);
+    return {
+      specScore: state.specScore,
+      signoffScore: state.signoffScore
+    };
+  }
+
+  function progressLabel(v) {
+    if (v < 20) return "刚起步";
+    if (v < 45) return "推进中";
+    if (v < 70) return "过半";
+    if (v < 90) return "接近完成";
+    return "基本完成";
+  }
+
+  function makeQuote(state, team) {
+    var tone = team.content.hidden.bias > 8 ? "opt" : team.content.hidden.bias < -8 ? "cau" : "neu";
+    var lines = (QUOTES[team.direction] && QUOTES[team.direction][tone]) || ["还在推进。"];
+    return pick(lines, state.rng);
+  }
+
+  function makeTeamReport(state, team) {
+    var h = team.content.hidden;
+    var lead = team.content.lead;
+    var noise = (state.rng() * 2 - 1) * 6;
+    var reported = clamp(team.progress + h.bias * 0.35 + noise, 0, 100);
+    var audit = state.auditDirection === team.direction;
+    var shown = audit ? team.progress : reported;
+    var details = [];
+
+    if (team.direction === "rtl") {
+      details.push("RTL 版本：" + (shown < 50 ? "首版在收尾" : shown < 72 ? "0.75 在收尾" : shown < 90 ? "0.9 已交付" : "freeze 候选"));
+    }
+    if (team.direction === "dv") {
+      var cov = audit ? state.coverage : clamp(state.coverage + h.bias * 0.2 + (state.rng() * 2 - 1) * 5 + (hasTrait(team, "coverage_theater") ? 15 : 0), 0, 100);
+      details.push("覆盖率自报 " + Math.round(cov) + "%");
+    }
+    if (team.direction === "midend") {
+      var viol = Math.round((100 - team.quality) * 0.8 + (100 - team.progress) * 0.2 + (state.rng() * 6 - 3));
+      details.push("综合报告：setup violation " + Math.max(0, viol) + " 条");
+      var power = Math.round((100 - team.quality) * 0.6 + (hasTrait(team, "low_power_gap") ? 20 : 0) + (state.rng() * 10 - 5));
+      details.push(power > 20 ? "功耗余量告急" : "功耗余量正常");
+    }
+    if (team.direction === "backend") {
+      var drc = Math.round((100 - team.quality) * 0.5 + (hasTrait(team, "drc_risk") ? 10 : 0) + (state.rng() * 6 - 3));
+      details.push("DRC " + Math.max(0, drc) + " 处");
+      details.push(team.quality < 60 ? "时序还没收敛" : "时序在收敛");
+    }
+    if (team.direction === "arch") details.push(hasTrait(team, "paper_tiger") ? "架构文档很漂亮" : "接口在收敛");
+    if (team.direction === "algo") details.push(hasTrait(team, "no_production") ? "定点误差还没验" : "模型在跑");
+
+    return {
+      id: team.direction,
+      direction: team.direction,
+      name: team.content.name,
+      lead: lead,
+      status: progressLabel(shown),
+      progress: shown,
+      trueProgress: audit ? team.progress : null,
+      quote: makeQuote(state, team),
+      speaker: lead,
+      details: details,
+      audit: audit,
+      teamInfo: team.content.headcount + " 人 · 平均 " + team.content.avgYears + " 年 · 月薪 " + team.content.salary + " 万",
+      dep: team.depNotes.length ? team.depNotes[0] : null
+    };
+  }
+
+  function pickEvents(state, count) {
+    var eligible = GC.events.filter(function (e) {
+      return (
+        e.months.indexOf(state.month) >= 0 &&
+        state.usedEvents.indexOf(e.id) < 0 &&
+        (!e.requires || e.requires(state))
+      );
+    });
+    var picked = [];
+    for (var i = 0; i < count && eligible.length > 0; i++) {
+      var total = eligible.reduce(function (s, e) {
+        return s + (e.weight || 1);
+      }, 0);
+      var r = state.rng() * total;
+      var idx = 0;
+      for (var j = 0; j < eligible.length; j++) {
+        r -= eligible[j].weight || 1;
+        if (r <= 0) {
+          idx = j;
+          break;
+        }
+      }
+      picked.push(eligible[idx]);
+      eligible.splice(idx, 1);
+    }
+    picked.forEach(function (e) {
+      state.usedEvents.push(e.id);
+    });
+    return picked;
+  }
+
+  function checkMilestones(state) {
+    var msgs = [];
+    var T = state.teams;
+    var m = state.month;
+
+    if (m === 1) {
+      if (state.specScore < 25 || T.arch.progress < 25 || T.algo.progress < 25) {
+        state.flags.arch_review_failed = true;
+        state.morale = clamp(state.morale - 5, 0, 100);
+        msgs.push({ ok: false, text: "M1 架构评审未过：RTL 启动会带着返工风险。" });
+      } else {
+        msgs.push({ ok: true, text: "M1 架构评审通过，规格和算法基线冻结。" });
+      }
+    }
+
+    if (m === 2) {
+      if (T.arch.progress < 50 || T.rtl.progress < 25 || T.dv.progress < 20) {
+        if (T.arch.progress < 50) state.flags.arch_not_frozen = true;
+        T.rtl.progress = Math.max(0, T.rtl.progress - 8);
+        T.rtl.quality = Math.max(20, T.rtl.quality - 5);
+        state.morale = clamp(state.morale - 3, 0, 100);
+        msgs.push({ ok: false, text: "M2 架构未冻结：RTL 首版返工，进度 -8。" });
+      } else {
+        msgs.push({ ok: true, text: "M2 RTL 首版和验证环境就绪。" });
+      }
+    }
+
+    if (m === 3) {
+      if (T.rtl.progress < 55 || T.midend.progress < 22) {
+        T.midend.progress = Math.max(0, T.midend.progress - 10);
+        T.midend.quality = Math.max(20, T.midend.quality - 5);
+        state.flags.rtl_late = true;
+        state.morale = clamp(state.morale - 3, 0, 100);
+        msgs.push({ ok: false, text: "M3 RTL 0.75 未达标：中端综合反复，进度 -10。" });
+      } else {
+        msgs.push({ ok: true, text: "M3 RTL 0.75 交付，中端完成第一次综合。" });
+      }
+    }
+
+    if (m === 4) {
+      if (T.rtl.progress < 80 || state.coverage < 30 || T.backend.progress < 15) {
+        if (state.coverage < 30) {
+          state.flags.coverage_gap = true;
+          state.bugs += 5;
+        }
+        if (T.backend.progress < 15) state.flags.backend_late = true;
+        state.morale = clamp(state.morale - 3, 0, 100);
+        msgs.push({ ok: false, text: "M4 覆盖率或后端启动不及预期：逃逸 bug 风险上升。" });
+      } else {
+        msgs.push({ ok: true, text: "M4 RTL 0.9、覆盖率启动、后端进场。" });
+      }
+    }
+
+    if (m === 5) {
+      if (T.rtl.progress < 100 || state.coverage < 55 || T.backend.progress < 55 || state.signoffScore < 60) {
+        state.flags.freeze_slipped = true;
+        state.flags.m6_crunch = true;
+        state.morale = clamp(state.morale - 5, 0, 100);
+        state.delayWeeks += 1;
+        msgs.push({ ok: false, text: "M5 freeze 没完全收住：M6 进入救火模式，窗口滑 1 周。" });
+      } else {
+        msgs.push({ ok: true, text: "M5 RTL freeze，验证和后端进入收敛。" });
+      }
+    }
+
+    if (m === 6) {
+      if (state.signoffScore < 65) {
+        state.flags.signoff_incomplete = true;
+        msgs.push({ ok: false, text: "M6 signoff 清单没齐：流片前只能硬做取舍。" });
+      } else {
+        msgs.push({ ok: true, text: "M6 进入 signoff：预算和窗口只够修一部分。" });
+      }
+    }
+
+    return msgs;
+  }
+
+  function resolveMonth(state) {
+    if (state.phase !== "planning") return { ok: false, message: "现在不是推进阶段。" };
+
+    var report = {
+      month: state.month,
+      salary: totalSalary(state),
+      notes: [],
+      directions: [],
+      events: [],
+      milestones: [],
+      gates: {},
+      budgetBefore: state.budget,
+      budgetAfter: 0
+    };
+
+    state.budget -= report.salary;
+    if (state.budget < 0) {
+      state.flags.budget_crisis = true;
+      state.morale = clamp(state.morale - 8, 0, 100);
+      report.notes.push("预算透支，全员士气 -8。");
+    }
+
+    applyDelayed(state, report);
+
+    var background = buildBackgroundWarnings(state);
+    var special = buildTeamEvents(state, background.warned);
+
+    getActiveDirections(state).forEach(function (d) {
+      var team = state.teams[d.id];
+      resolveTeam(state, team);
+      if (background.warned.indexOf(team.content.id) < 0 && special.teamId !== team.content.id) {
+        applyFlightRisk(state, team, report);
+      }
+      report.directions.push(makeTeamReport(state, team));
+    });
+
+    updateBugs(state);
+    var gates = updateGates(state);
+    report.gates = {
+      specScore: Math.round(gates.specScore),
+      signoffScore: Math.round(gates.signoffScore),
+      specLabel: gates.specScore < 35 ? "规格有风险" : gates.specScore < 70 ? "规格在收敛" : "规格稳定",
+      signoffLabel: gates.signoffScore < 50 ? "signoff 有风险" : gates.signoffScore < 75 ? "signoff 在收敛" : "signoff 可控"
+    };
+
+    var eventCount = state.rng() < 0.4 ? 2 : 1;
+    var events = pickEvents(state, eventCount);
+    var backgroundPending = background.events.map(function (e) {
+      return {
+        id: e.id,
+        title: e.title,
+        text: e.text,
+        options: e.options,
+        resolved: false,
+        chosen: null,
+        resultText: null
+      };
+    });
+    var specialPending = special.event
+      ? [
+          {
+            id: special.event.id,
+            title: special.event.title,
+            text: special.event.text,
+            options: special.event.options,
+            resolved: false,
+            chosen: null,
+            resultText: null
+          }
+        ]
+      : [];
+    state.pendingEvents = backgroundPending.concat(specialPending).concat(
+      events.map(function (e) {
+        return {
+          id: e.id,
+          title: e.title,
+          text: e.text,
+          options: e.options,
+          resolved: false,
+          chosen: null,
+          resultText: null
+        };
+      })
+    );
+    report.events = state.pendingEvents;
+
+    report.milestones = checkMilestones(state);
+    report.budgetAfter = state.budget;
+    report.morale = state.morale;
+    report.coverage = state.coverage;
+    report.bugs = state.bugs;
+    report.delayWeeks = state.delayWeeks;
+
+    state.lastTeamReports = {};
+    report.directions.forEach(function (t) {
+      state.lastTeamReports[t.direction] = t;
+    });
+    state.lastGates = report.gates;
+
+    state.stats.monthsPlayed++;
+    state.currentReport = report;
+    state.phase = "report";
+    return report;
+  }
+
+  function resolveEvent(state, eventId, optionIndex) {
+    var ev = state.pendingEvents.find(function (e) {
+      return e.id === eventId;
+    });
+    if (!ev) return { ok: false, message: "没有这个事件。" };
+    if (ev.resolved) return { ok: false, message: "这个事件已经处理过了。" };
+    var opt = ev.options[optionIndex];
+    if (!opt) return { ok: false, message: "没有这个选项。" };
+
+    applyEffects(state, opt.effects);
+    ev.resolved = true;
+    ev.chosen = opt.label;
+    ev.resultText = opt.result;
+    state.stats.eventsResolved++;
+    state.log.push("M" + state.month + " 事件「" + ev.title + "」：" + opt.label + "。");
+    return { ok: true, event: ev, option: opt, result: opt.result };
+  }
+
+  function allEventsResolved(state) {
+    return state.pendingEvents.every(function (e) {
+      return e.resolved;
+    });
+  }
+
+  function advanceMonth(state) {
+    if (state.phase !== "report") return { ok: false, message: "现在不是月报阶段。" };
+    if (!allEventsResolved(state)) return { ok: false, message: "还有突发事件没处理。" };
+
+    if (state.month >= 6) {
+      generateWaivers(state);
+      return { ok: true, phase: "waiver" };
+    }
+
+    state.month += 1;
+    prepareMonth(state);
+    state.log.push("进入 M" + state.month + "。");
+    return { ok: true, phase: "planning" };
+  }
+
+  function generateWaivers(state) {
+    var eligible = GC.waivers.filter(function (w) {
+      return !w.requires || w.requires(state);
+    });
+    eligible.sort(function (a, b) {
+      return b.trueRisk - a.trueRisk;
+    });
+
+    var items = eligible.slice(0, 6).map(function (w) {
+      return {
+        id: w.id,
+        category: w.category,
+        label: w.label,
+        hint: w.hint,
+        trueRisk: w.trueRisk,
+        fixCost: w.fixCost,
+        fixWeeks: w.fixWeeks,
+        fixed: false,
+        waived: false
+      };
+    });
+
+    var fi = 0;
+    while (items.length < 6 && fi < GC.waiverFillers.length) {
+      var f = GC.waiverFillers[fi++];
+      if (
+        items.some(function (i) {
+          return i.id === f.id;
+        })
+      ) {
+        continue;
+      }
+      items.push({
+        id: f.id,
+        category: f.category,
+        label: f.label,
+        hint: f.hint,
+        trueRisk: f.trueRisk,
+        fixCost: f.fixCost,
+        fixWeeks: f.fixWeeks,
+        fixed: false,
+        waived: false
+      });
+    }
+
+    state.waivers = items;
+    state.phase = "waiver";
+    state.log.push("M6 signoff：生成 " + items.length + " 条 waive 项。");
+    return items;
+  }
+
+  function setWaiver(state, waiverId, decision) {
+    if (state.phase !== "waiver") return { ok: false, message: "现在不是 signoff 阶段。" };
+    var w = state.waivers.find(function (x) {
+      return x.id === waiverId;
+    });
+    if (!w) return { ok: false, message: "没有这个 waive 项。" };
+
+    if (w.fixed) {
+      state.budget += w.fixCost;
+      state.delayWeeks -= w.fixWeeks;
+    }
+    w.fixed = false;
+    w.waived = false;
+
+    if (decision === "fix") {
+      state.budget -= w.fixCost;
+      state.delayWeeks += w.fixWeeks;
+      w.fixed = true;
+    } else {
+      w.waived = true;
+    }
+
+    return { ok: true, waiver: w };
+  }
+
+  function submitWaivers(state) {
+    if (state.phase !== "waiver") return { ok: false, message: "现在不是 signoff 阶段。" };
+    state.waivers.forEach(function (w) {
+      if (!w.fixed && !w.waived) w.waived = true;
+    });
+
+    var evaluation = evaluateTapeout(state);
+    state.evaluation = evaluation;
+    state.phase = "result";
+    state.log.push("流片评估：" + evaluation.ending.title + "。");
+    return evaluation;
+  }
+
+  function traitRiskOf(state) {
+    var weights = {
+      lint_dirty: 0.03,
+      eco_prone: 0.03,
+      outsourced: 0.04,
+      coverage_theater: 0.04,
+      script_driven: 0.03,
+      drc_risk: 0.04,
+      signoff_risk: 0.04,
+      junior: 0.02,
+      high_turnover: 0.02,
+      integration_risk: 0.03,
+      no_production: 0.02,
+      paper_tiger: 0.02,
+      job_hopper: 0.02,
+      no_overtime: 0.02,
+      not_manageable: 0.03,
+      low_power_gap: 0.03
+    };
+    var risk = 0;
+    Object.keys(state.teams).forEach(function (key) {
+      state.teams[key].content.hidden.traits.forEach(function (t) {
+        risk += weights[t] || 0;
+      });
+    });
+    return Math.min(0.35, risk);
+  }
+
+  function lowerGrade(grade) {
+    return grade === "S" ? "A" : grade === "A" ? "B" : grade === "B" ? "C" : "D";
+  }
+
+  function evaluateTapeout(state) {
+    var waived = state.waivers.filter(function (w) {
+      return !w.fixed;
+    });
+    var fixed = state.waivers.filter(function (w) {
+      return w.fixed;
+    });
+    var risk =
+      waived.reduce(function (s, w) {
+        return s + w.trueRisk;
+      }, 0) +
+      fixed.reduce(function (s, w) {
+        return s + w.trueRisk * 0.2;
+      }, 0);
+    var fixRisk = fixed.length * 0.04;
+    var effectiveRisk = risk + fixRisk;
+
+    var coverage = state.coverage;
+    var bugs = state.bugs;
+    var T = state.teams;
+    var quality = (T.backend.quality + T.midend.quality + T.rtl.quality) / 3;
+    var coveragePenalty = Math.max(0, 90 - coverage) / 100;
+    var bugPenalty = Math.min(0.35, bugs * 0.015);
+    var qualityBonus = Math.max(-0.15, Math.min(0.1, ((quality - 65) / 100) * 0.3));
+    var archPenalty = (Math.max(0, 70 - T.arch.quality) / 100) * 0.1;
+    var specPenalty =
+      (Math.max(0, 70 - (T.arch.quality + T.algo.quality) / 2) / 100) * 0.15 +
+      (Math.max(0, 60 - state.specScore) / 100) * 0.1;
+    var algoPenalty =
+      (Math.max(0, 70 - T.algo.quality) / 100) * 0.15 +
+      (Math.max(0, 90 - T.algo.progress) / 100) * 0.1;
+    var overspend = Math.max(0, -state.budget) / Math.max(1, state.initialBudget);
+    var traitRisk = traitRiskOf(state);
+
+    var pWorks = clamp(
+      0.93 -
+        effectiveRisk * 0.14 -
+        coveragePenalty * 0.7 -
+        bugPenalty +
+        qualityBonus -
+        archPenalty -
+        specPenalty -
+        algoPenalty -
+        overspend * 0.8 -
+        traitRisk * 0.5,
+      0.05,
+      0.95
+    );
+    var works = state.rng() < pWorks;
+    var condition = "works";
+    if (!works) {
+      condition = state.rng() < 0.35 ? "partial" : "dead";
+    }
+
+    var severe = "none";
+    if (works) {
+      var pSevere = clamp(
+        effectiveRisk * 0.06 +
+          bugPenalty * 0.5 +
+          Math.max(0, 85 - coverage) * 0.008 +
+          (archPenalty + specPenalty + algoPenalty) * 0.6 +
+          overspend * 0.35 +
+          traitRisk * 0.35,
+        0,
+        0.85
+      );
+      if (state.rng() < pSevere) severe = state.rng() < 0.35 ? "fatal" : "major";
+      else if (state.rng() < 0.3) severe = "minor";
+    }
+
+    var costRatio = Math.max(0, state.initialBudget - state.budget) / state.initialBudget;
+    var pMP = clamp(
+      0.94 -
+        effectiveRisk * 0.06 -
+        Math.max(0, 90 - coverage) * 0.012 -
+        (100 - quality) * 0.003 -
+        costRatio * 0.08 -
+        (archPenalty + specPenalty + algoPenalty) * 0.5 -
+        overspend * 0.5 -
+        traitRisk * 0.4,
+      0.05,
+      0.95
+    );
+    var mp = works && severe !== "fatal" && state.rng() < pMP;
+
+    var overspendTier = overspend <= 0 ? "none" : overspend <= 0.2 ? "rating" : "collapse-roll";
+    var pCashCrash = overspend > 0.2 ? clamp(overspend, 0, 0.95) : 0;
+    var cashCrash = false;
+    if (works && severe !== "fatal" && overspend > 0.2) {
+      cashCrash = state.rng() < pCashCrash;
+      if (cashCrash) mp = false;
+    }
+    var budgetRatingPenalty = overspend > 0 ? 1 : 0;
+
+    var onTime = state.delayWeeks <= 0;
+    var market = clamp(
+      100 -
+        state.marketPenalty -
+        state.delayWeeks * 8 -
+        (state.flags.spec_ambiguous ? 5 : 0) -
+        (state.flags.cut_scope ? 5 : 0) -
+        (state.flags.algo_risk ? 5 : 0) -
+        Math.max(0, 70 - (T.arch.quality + T.algo.quality) / 2) * 0.4,
+      0,
+      100
+    );
+
+    var functionScore = 0;
+    if (works) functionScore += 18;
+    if (condition === "works") functionScore += 4;
+    if (severe === "none") functionScore += 10;
+    else if (severe === "minor") functionScore += 7;
+    else if (severe === "major") functionScore += 3;
+    functionScore += Math.min(8, coverage / 12.5);
+
+    var marketScore = market / 5;
+    var costScore = clamp(state.budget / state.initialBudget, 0, 1) * 20;
+    var timeScore = onTime ? 20 : Math.max(0, 20 - state.delayWeeks * 5);
+    var total = functionScore + marketScore + costScore + timeScore;
+    if (!mp) total = Math.min(total, 69);
+    if (severe === "fatal") total = Math.min(total, 49);
+    if (!works) total = Math.min(total, 49);
+    if (cashCrash) total = Math.min(total, 49);
+
+    var grade = total >= 90 ? "S" : total >= 80 ? "A" : total >= 70 ? "B" : total >= 60 ? "C" : "D";
+    if (cashCrash) grade = "D";
+    else if (budgetRatingPenalty) grade = lowerGrade(grade);
+
+    var evaluation = {
+      works: works,
+      condition: condition,
+      severe: severe,
+      mp: mp,
+      onTime: onTime,
+      market: Math.round(market),
+      budgetRemaining: state.budget,
+      risk: Math.round(risk * 100) / 100,
+      fixRisk: Math.round(fixRisk * 100) / 100,
+      fixCount: fixed.length,
+      fixCost: fixed.reduce(function (s, w) {
+        return s + w.fixCost;
+      }, 0),
+      traitRisk: Math.round(traitRisk * 100) / 100,
+      coverage: Math.round(coverage * 10) / 10,
+      bugs: Math.round(bugs * 10) / 10,
+      quality: Math.round(quality * 10) / 10,
+      pWorks: Math.round(pWorks * 100) / 100,
+      pSevere:
+        Math.round(
+          clamp(
+            effectiveRisk * 0.06 +
+              bugPenalty * 0.5 +
+              Math.max(0, 85 - coverage) * 0.008 +
+              (archPenalty + specPenalty + algoPenalty) * 0.6 +
+              overspend * 0.35 +
+              traitRisk * 0.35,
+            0,
+            0.85
+          ) * 100
+        ) / 100,
+      pMP: Math.round(pMP * 100) / 100,
+      delayWeeks: state.delayWeeks,
+      score: Math.round(total),
+      grade: grade,
+      overspend: Math.round(overspend * 100) / 100,
+      overspendPct: Math.round(overspend * 1000) / 10,
+      overspendTier: overspendTier,
+      budgetRatingPenalty: budgetRatingPenalty,
+      pCashCrash: Math.round(pCashCrash * 100) / 100,
+      cashCrash: cashCrash,
+      waived: waived.map(function (w) {
+        return { id: w.id, label: w.label, trueRisk: w.trueRisk };
+      }),
+      fixed: fixed.map(function (w) {
+        return { id: w.id, label: w.label, trueRisk: w.trueRisk };
+      })
+    };
+
+    evaluation.ending = GC.endings.find(function (e) {
+      return e.condition(evaluation);
+    }) || GC.endings[GC.endings.length - 1];
+
+    return evaluation;
+  }
+
+  function getTruth(state) {
+    return {
+      seed: state.seed,
+      project: state.project,
+      teams: GC.directions.map(function (d) {
+        var team = state.teams[d.id];
+        return {
+          direction: d.id,
+          directionName: d.name,
+          name: team.content.name,
+          lead: team.content.lead,
+          headcount: team.content.headcount,
+          salary: team.content.salary,
+          avgYears: team.content.avgYears,
+          levels: team.content.levels,
+          desc: team.content.desc,
+          tags: team.content.tags,
+          clues: team.content.clues,
+          fit: team.content.fit,
+          hidden: team.content.hidden,
+          progress: Math.round(team.progress),
+          quality: Math.round(team.quality)
+        };
+      }),
+      waivers: state.waivers.map(function (w) {
+        return {
+          id: w.id,
+          label: w.label,
+          trueRisk: w.trueRisk,
+          fixed: w.fixed,
+          waived: w.waived
+        };
+      }),
+      flags: Object.keys(state.flags).filter(function (k) {
+        return state.flags[k];
+      }),
+      log: state.log,
+      evaluation: state.evaluation
+    };
+  }
+
+  global.GameEngine = {
+    DIRECTIONS: GC.directions,
+    ACTIONS: ACTIONS,
+    createRun: createRun,
+    chooseAction: chooseAction,
+    resolveMonth: resolveMonth,
+    resolveEvent: resolveEvent,
+    allEventsResolved: allEventsResolved,
+    advanceMonth: advanceMonth,
+    generateWaivers: generateWaivers,
+    setWaiver: setWaiver,
+    submitWaivers: submitWaivers,
+    getTruth: getTruth,
+    getActiveDirections: getActiveDirections,
+    getTeam: getTeam,
+    totalSalary: totalSalary,
+    progressLabel: progressLabel,
+    traitRiskOf: traitRiskOf,
+    clamp: clamp
+  };
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+  <script>
+(function (global) {
+  function miniTool() {
+    var xhs = global.xhs;
+    return xhs && xhs.miniTool;
+  }
+
+  function canSave() {
+    var mt = miniTool();
+    return !!(mt && typeof mt.saveImageToPhotosAlbum === "function");
+  }
+
+  function canPost() {
+    var mt = miniTool();
+    return !!(mt && typeof mt.postNote === "function");
+  }
+
+  function clip(value, max) {
+    var text = String(value == null ? "" : value);
+    return text.length > max ? text.slice(0, max) : text;
+  }
+
+  function fileFor(dataUrl) {
+    var mt = miniTool();
+    if (!mt || typeof mt.writeTempFile !== "function") {
+      return Promise.resolve(dataUrl);
+    }
+    try {
+      var task = mt.writeTempFile({ data: dataUrl });
+      if (!task || typeof task.then !== "function") {
+        return Promise.resolve(dataUrl);
+      }
+      return task.then(
+        function (result) {
+          return result && result.filePath ? result.filePath : dataUrl;
+        },
+        function () {
+          return dataUrl;
+        }
+      );
+    } catch (error) {
+      return Promise.resolve(dataUrl);
+    }
+  }
+
+  function saveImage(dataUrl) {
+    var mt = miniTool();
+    if (!mt || typeof mt.saveImageToPhotosAlbum !== "function") {
+      return Promise.reject(new Error("当前环境不支持保存到相册"));
+    }
+    return fileFor(dataUrl).then(function (filePath) {
+      return mt.saveImageToPhotosAlbum({ filePath: filePath });
+    });
+  }
+
+  function postNote(dataUrl, options) {
+    options = options || {};
+    var mt = miniTool();
+    if (!mt || typeof mt.postNote !== "function") {
+      return Promise.reject(new Error("当前环境不支持发布笔记"));
+    }
+    return fileFor(dataUrl).then(function (filePath) {
+      return mt.postNote({
+        title: clip(options.title, 20),
+        content: clip(options.content, 1000),
+        pageType: "photo_publish",
+        mediaInfo: {
+          image_resources: [{ url: filePath }]
+        }
+      });
+    });
+  }
+
+  global.MiniPlatform = {
+    isAvailable: function () {
+      return !!miniTool();
+    },
+    canSave: canSave,
+    canPost: canPost,
+    saveImage: saveImage,
+    postNote: postNote
+  };
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+  <script>
+(function (global) {
+  var E = global.GameEngine;
+  var C = global.GameContent;
+  var RNG = global.RNG;
+
+  var app = document.getElementById("app");
+  var modalRoot = document.getElementById("modalRoot");
+  var toastEl = document.getElementById("toast");
+
+  var UI = {
+    screen: "title",
+    seed: "",
+    projectId: "xuanwu1",
+    selectedTeams: {},
+    checkedTeams: {},
+    backgroundCost: 0,
+    game: null,
+    report: null,
+    lastRenderScreen: null,
+    toastTimer: null,
+    forceScrollTop: false,
+    decisionAction: null,
+    decisionDirection: null,
+    confirmWaiveAll: false,
+    confirmSubmit: false,
+    shareImageDataUrl: null
+  };
+
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  function randomProjectName() {
+    var prefixes = ["玄武", "朱雀", "青龙", "白虎", "麒麟", "鲲鹏", "天枢", "摇光", "昆仑", "蓬莱"];
+    var prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+    return prefix + "-" + (Math.floor(Math.random() * 90) + 10);
+  }
+
+  function currentProject() {
+    return C.projects.find(function (p) {
+      return p.id === UI.projectId;
+    }) || C.projects[0];
+  }
+
+  function directionById(id) {
+    return C.directions.find(function (d) {
+      return d.id === id;
+    });
+  }
+
+  function teamById(id) {
+    return C.candidateTeams.find(function (t) {
+      return t.id === id;
+    });
+  }
+
+  function selectedTeamList() {
+    return Object.keys(UI.selectedTeams)
+      .map(function (direction) {
+        return teamById(UI.selectedTeams[direction]);
+      })
+      .filter(Boolean);
+  }
+
+  function selectedTeamIds() {
+    return selectedTeamList().map(function (t) {
+      return t.id;
+    });
+  }
+
+  function selectedHeadcount() {
+    return selectedTeamList().reduce(function (sum, t) {
+      return sum + t.headcount;
+    }, 0);
+  }
+
+  function selectedPayroll() {
+    return selectedTeamList().reduce(function (sum, t) {
+      return sum + t.salary;
+    }, 0);
+  }
+
+  function selectedDirectionCount() {
+    return selectedTeamList().length;
+  }
+
+  function directionName(id) {
+    var d = directionById(id);
+    return d ? d.name : id;
+  }
+
+  function levelsLabel(levels) {
+    var parts = [
+      ["top", "顶级"],
+      ["expert", "专家"],
+      ["senior", "资深"],
+      ["engineer", "工程师"],
+      ["junior", "新人"]
+    ];
+    return parts
+      .filter(function (p) {
+        return levels[p[0]] > 0;
+      })
+      .map(function (p) {
+        return levels[p[0]] + " " + p[1];
+      })
+      .join(" / ");
+  }
+
+  function mixLabel(team) {
+    return levelsLabel(team.levels);
+  }
+
+  function moraleLabel(m) {
+    if (m >= 70) return "稳定";
+    if (m >= 45) return "疲惫";
+    if (m >= 25) return "低落";
+    return "崩溃边缘";
+  }
+
+  function activeDirections() {
+    if (!UI.game) return [];
+    return E.getActiveDirections(UI.game);
+  }
+
+  function toast(msg) {
+    if (!toastEl) return;
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(UI.toastTimer);
+    UI.toastTimer = setTimeout(function () {
+      toastEl.classList.remove("show");
+    }, 1900);
+  }
+
+  function showModal(inner) {
+    modalRoot.innerHTML = '<div class="sheet-backdrop"><div class="sheet">' + inner + "</div></div>";
+    document.body.classList.add("modal-open");
+  }
+
+  function hideModal() {
+    modalRoot.innerHTML = "";
+    document.body.classList.remove("modal-open");
+  }
+
+  function effectChips(result) {
+    if (!result || !result.changes || !result.changes.length) return "";
+    return (
+      '<div class="effect-chips">' +
+      result.changes
+        .map(function (change) {
+          return '<span class="effect-chip">' + esc(change) + "</span>";
+        })
+        .join("") +
+      "</div>"
+    );
+  }
+
+  function decisionSummary(s) {
+    var r = s.lastAction && s.lastAction.result;
+    if (!r) return "点击下方按钮推进到 M" + s.month + " 月报。";
+    var parts = [r.action + (r.targetName ? " · " + r.targetName : "")].concat(r.changes.slice(0, 4));
+    if (r.note) parts.push(r.note);
+    return parts.join(" · ") + "。点击下方按钮推进到月报。";
+  }
+
+  function decisionBanner(title, text) {
+    return (
+      '<div class="decision-banner"><span class="decision-pill">需要决策</span>' +
+      '<div class="decision-title">' +
+      esc(title) +
+      '</div><div class="decision-text">' +
+      esc(text) +
+      "</div></div>"
+    );
+  }
+
+  function nextBanner(title, text) {
+    return (
+      '<div class="decision-banner next"><span class="decision-pill">下一步</span>' +
+      '<div class="decision-title">' +
+      esc(title) +
+      '</div><div class="decision-text">' +
+      esc(text) +
+      "</div></div>"
+    );
+  }
+
+  function topbar() {
+    var s = UI.game;
+    if (!s) return "";
+    return (
+      '<div class="topbar">' +
+      '<div class="topbar-item"><span class="topbar-label">月份</span><span class="topbar-value">M' +
+      s.month +
+      "/6</span></div>" +
+      '<div class="topbar-item"><span class="topbar-label">预算</span><span class="topbar-value ' +
+      (s.budget < 0 ? "danger" : "") +
+      '">' +
+      Math.round(s.budget) +
+      " 万</span></div>" +
+      '<div class="topbar-item"><span class="topbar-label">士气</span><span class="topbar-value">' +
+      moraleLabel(s.morale) +
+      "</span></div>" +
+      '<div class="topbar-item"><span class="topbar-label">项目名</span><span class="topbar-value mono">' +
+      esc(s.seed) +
+      "</span></div>" +
+      "</div>"
+    );
+  }
+
+  function budgetCrisisNotice(s) {
+    if (!s || s.budget >= 0) return "";
+    var pct = Math.round((Math.max(0, -s.budget) / Math.max(1, s.initialBudget)) * 1000) / 10;
+    var detail =
+      pct > 20
+        ? "当前超支 " +
+          pct +
+          "%。最终等待量产时按超支比例判定资金链断裂（约 " +
+          Math.min(95, pct) +
+          "%）；即使没断，评级也会 -1。"
+        : "当前超支 " + pct + "%。最终评级 -1；暂不触发资金链断裂判定。";
+    return (
+      '<div class="budget-crisis">' +
+      '<div class="budget-crisis-title">资金链断裂传言</div>' +
+      '<div class="budget-crisis-text">' +
+      esc("资金链断裂的传言在团队里扩散，全员士气已经受影响。" + detail) +
+      "</div></div>"
+    );
+  }
+
+  function renderTitle() {
+    return (
+      '<div class="wrap title-screen">' +
+      '<div class="brand-mark">SILICON / PM</div>' +
+      "<h1>流片吧，PM</h1>" +
+      '<p class="author">作者：一维空间</p>' +
+      '<p class="lead">6 个月，六个团队，一颗芯片。流程不会等你，月报也不一定是真的。</p>' +
+      decisionBanner("开始新项目", "给项目起个名字，或留空随机生成。") +
+      '<div class="panel">' +
+      '<div class="field-label">项目名称</div>' +
+      '<input id="seedInput" class="input" maxlength="20" placeholder="例如：我的通信芯片" value="' +
+      esc(UI.seed) +
+      '">' +
+      '<div class="fine" style="margin:-4px 0 12px">同名会复现同一局（相当于随机种子）；留空随机生成。</div>' +
+      '<button class="btn primary block attention" data-act="start">开始新项目</button>' +
+      "</div>" +
+      '<div class="card subtle">' +
+      '<div class="mini-title">怎么玩</div>' +
+      '<ul class="how-list">' +
+      "<li>先为 6 个方向各选一个团队，选中即锁定该方向负责人。</li>" +
+      "<li>团队人数、月薪、平均年限可见；真实战力不可见，只能看描述和背调线索。</li>" +
+      "<li>每月先选动作，再选动作下的方向或确认；选完才能推进。M6 做 signoff 取舍，然后流片。</li>" +
+      "</ul>" +
+      "</div>" +
+      '<p class="fine">纯离线文字游戏。人物与项目均为虚构。</p>' +
+      "</div>"
+    );
+  }
+
+  function teamCard(team) {
+    var selected = UI.selectedTeams[team.direction] === team.id;
+    var locked = !!UI.selectedTeams[team.direction] && !selected;
+    var checked = Object.prototype.hasOwnProperty.call(UI.checkedTeams, team.id);
+    var clue = checked ? team.clues[UI.checkedTeams[team.id]] : "";
+    return (
+      '<div class="candidate team-card ' +
+      (selected ? "selected " : "") +
+      (locked ? "blocked" : "") +
+      '">' +
+      '<div class="candidate-head">' +
+      "<div><div class=\"name\">" +
+      esc(team.name) +
+      '</div><div class="role">' +
+      esc(directionName(team.direction)) +
+      " · " +
+      team.headcount +
+      " 人 · 月薪 " +
+      team.salary +
+      " 万 · 平均 " +
+      team.avgYears +
+      " 年</div></div>" +
+      '<button class="btn small ' +
+      (selected ? "secondary" : "primary") +
+      '" data-act="toggle-team" data-id="' +
+      team.id +
+      '" ' +
+      (locked ? "disabled" : "") +
+      ">" +
+      (selected ? "取消" : locked ? "已锁定" : "选择") +
+      "</button>" +
+      "</div>" +
+      '<div class="mix-line">' +
+      esc(mixLabel(team)) +
+      "</div>" +
+      '<p class="pitch">' +
+      esc(team.desc) +
+      "</p>" +
+      '<div class="tags">' +
+      team.tags
+        .map(function (t) {
+          return '<span class="tag">' + esc(t) + "</span>";
+        })
+        .join("") +
+      "</div>" +
+      '<div class="btn-group" style="margin-top:10px">' +
+      '<button class="btn ghost small" data-act="team-detail" data-id="' +
+      team.id +
+      '">团队详情</button>' +
+      (checked
+        ? ""
+        : '<button class="btn ghost small" data-act="background-team" data-id="' +
+          team.id +
+          '">背调 -15 万</button>') +
+      "</div>" +
+      (checked ? '<div class="clue">背调线索：' + esc(clue) + "</div>" : "") +
+      "</div>"
+    );
+  }
+
+  function displayedTeams(direction) {
+    var teams = C.candidateTeams.filter(function (team) {
+      return team.direction === direction;
+    });
+    var rng = RNG.mulberry32(RNG.hashSeed(UI.seed + ":pool:" + direction));
+    var arr = teams.slice();
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(rng() * (i + 1));
+      var tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr.slice(0, 3);
+  }
+
+  function renderTeamSelect() {
+    var p = currentProject();
+    var dirCount = selectedDirectionCount();
+    var remaining = C.directions.length - dirCount;
+    var headcount = selectedHeadcount();
+    var payroll = selectedPayroll();
+    var projected = payroll * p.months;
+    var actualBudget = p.budget - UI.backgroundCost;
+    var overBudget = projected > actualBudget;
+    return (
+      '<div class="wrap">' +
+      '<div class="row between" style="margin-bottom:14px">' +
+      '<div><div class="kicker">芯片方向</div><div class="h2">' +
+      esc(p.name) +
+      "</div></div>" +
+      '<button class="btn ghost small" data-act="back-title">返回</button>' +
+      "</div>" +
+      '<div class="card">' +
+      '<div class="fine" style="margin-top:0">项目名称：' +
+      esc(UI.seed) +
+      "（同名复现同一局）</div>" +
+      '<p class="body">' +
+      esc(p.brief) +
+      "</p>" +
+      '<div class="stats-row">' +
+      '<div class="stat"><div class="stat-label">预算</div><div class="stat-value">' +
+      p.budget +
+      " 万</div></div>" +
+      '<div class="stat"><div class="stat-label">背调已花</div><div class="stat-value">' +
+      UI.backgroundCost +
+      " 万</div></div>" +
+      '<div class="stat"><div class="stat-label">已选方向</div><div class="stat-value">' +
+      dirCount +
+      "/" +
+      C.directions.length +
+      "</div></div>" +
+      '<div class="stat"><div class="stat-label">团队人数</div><div class="stat-value">' +
+      headcount +
+      "</div></div>" +
+      "</div>" +
+      '<div class="fine">月薪合计 ' +
+      payroll +
+      " 万 · 6 个月工资预计 " +
+      projected +
+      " 万 · 实际启动预算 " +
+      actualBudget +
+      " 万</div>" +
+      (overBudget
+        ? '<div class="warning">6 个月工资超过实际预算。你需要在项目里少做动作、砍需求，或者接受预算透支。</div>'
+        : "") +
+      "</div>" +
+      (remaining > 0
+        ? decisionBanner("还需要选 " + remaining + " 个方向", "每个方向 3 选 1；选中即锁定负责人，方向不会空缺。")
+        : nextBanner("团队已选齐", "确认下方团队，然后进入项目。")) +
+      '<div class="section-title">每个方向选一个团队。选中即锁定负责人，方向不会空缺。</div>' +
+      C.directions
+        .map(function (d) {
+          var teams = displayedTeams(d.id);
+          var chosen = UI.selectedTeams[d.id];
+          return (
+            '<div class="direction-head"><div><div class="direction-name">' +
+            esc(d.name) +
+            '<span class="decision-tag ' +
+            (chosen ? "done" : "pending") +
+            '">' +
+            (chosen ? "已锁定" : "待选") +
+            '</span></div><div class="direction-hint">' +
+            esc(d.hint) +
+            "</div></div></div>" +
+            '<div class="candidate-list">' +
+            teams.map(teamCard).join("") +
+            "</div>"
+          );
+        })
+        .join("") +
+      '<div class="sticky-bottom">' +
+      '<div class="hint">' +
+      (remaining > 0 ? '<span class="decision-tag pending">还差 ' + remaining + " 个方向</span> " : "") +
+      "已选方向 " +
+      dirCount +
+      "/" +
+      C.directions.length +
+      " · 团队 " +
+      headcount +
+      " 人 · 月薪 " +
+      payroll +
+      " 万" +
+      (overBudget ? ' · <span class="danger-text">工资超预算</span>' : "") +
+      "</div>" +
+      '<button class="btn primary block ' +
+      (dirCount === C.directions.length ? "attention" : "") +
+      '" data-act="start-game" ' +
+      (dirCount !== C.directions.length ? "disabled" : "") +
+      ">带团队进项目（" +
+      headcount +
+      " 人）</button>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function showTeamDetail(teamId) {
+    var team = teamById(teamId);
+    if (!team) return;
+    var checked = Object.prototype.hasOwnProperty.call(UI.checkedTeams, team.id);
+    var clue = checked ? team.clues[UI.checkedTeams[team.id]] : "";
+    showModal(
+      '<div class="sheet-handle"></div>' +
+        '<div class="sheet-head">' +
+        '<div><div class="h2">' +
+        esc(team.name) +
+        '</div><div class="body">' +
+        esc(directionName(team.direction)) +
+        " · " +
+        team.headcount +
+        " 人 · 月薪 " +
+        team.salary +
+        " 万 · 平均 " +
+        team.avgYears +
+        " 年</div></div>" +
+        '<button class="btn ghost small" data-act="close-modal">关闭</button>' +
+        "</div>" +
+        '<p class="pitch">' +
+        esc(team.desc) +
+        "</p>" +
+        '<div class="fine">资历结构：' +
+        esc(mixLabel(team)) +
+        "</div>" +
+        '<div class="fine">负责人：' +
+        esc(team.lead) +
+        "。 " +
+        esc(team.leadBio || "") +
+        "</div>" +
+        '<div class="tags">' +
+        team.tags
+          .map(function (t) {
+            return '<span class="tag">' + esc(t) + "</span>";
+          })
+          .join("") +
+        "</div>" +
+        (clue ? '<div class="clue">背调线索：' + esc(clue) + "</div>" : "") +
+        '<p class="fine">以上都是描述。真实战力、质量、速度、协作、稳定性和隐藏风险不可见。</p>'
+    );
+  }
+
+  function gateCards() {
+    var g = UI.game && UI.game.lastGates;
+    return (
+      '<div class="gate-grid">' +
+      '<div class="gate-card"><div class="mini-title">规格 gate</div><div class="gate-value">' +
+      (g ? esc(g.specLabel) : "未开始") +
+      '</div><div class="fine">架构 + 算法共同负责</div></div>' +
+      '<div class="gate-card"><div class="mini-title">Signoff gate</div><div class="gate-value">' +
+      (g ? esc(g.signoffLabel) : "未开始") +
+      '</div><div class="fine">后端 + 中端 + 验证收敛度</div></div>' +
+      "</div>"
+    );
+  }
+
+  function teamGameCard(d) {
+    var team = UI.game.teams[d.id];
+    var last = UI.game.lastTeamReports[d.id];
+    var shown = last ? last.progress : 0;
+    var status = last ? last.status : "未开始";
+    var quote = last ? last.quote : "还没有月报。";
+    var speaker = last ? last.speaker : team.content.lead;
+    return (
+      '<div class="track-card team-game-card">' +
+      '<div class="track-head">' +
+      "<div><div class=\"track-name\">" +
+      esc(team.content.name) +
+      '</div><div class="track-goal">' +
+      esc(d.name) +
+      " · " +
+      team.content.headcount +
+      " 人 · 月薪 " +
+      team.content.salary +
+      " 万 · 平均 " +
+      team.content.avgYears +
+      " 年</div></div>" +
+      '<span class="badge">' +
+      esc(status) +
+      "</span>" +
+      "</div>" +
+      '<div class="progress"><div class="progress-fill" style="width:' +
+      Math.round(shown) +
+      '%"></div></div>' +
+      (last
+        ? '<div class="quote"><span class="quote-speaker">' +
+          esc(speaker) +
+          "：</span>“" +
+          esc(quote) +
+          "”</div>"
+        : "") +
+      (last && last.details
+        ? last.details
+            .map(function (x) {
+              return '<div class="detail">' + esc(x) + "</div>";
+            })
+            .join("")
+        : "") +
+      (last && last.dep ? '<div class="warning">' + esc(last.dep) + "</div>" : "") +
+      '<div class="fine">' +
+      (last && last.audit ? "已审计 · " : "") +
+      (last ? "上期自报" : "尚未月报") +
+      "</div>" +
+      '<button class="btn ghost small" style="margin-top:8px" data-act="team-detail" data-id="' +
+      team.content.id +
+      '">团队详情</button>' +
+      "</div>"
+    );
+  }
+
+  function renderGame() {
+    var s = UI.game;
+    var p = currentProject();
+    var active = activeDirections();
+    return (
+      '<div class="wrap game-screen">' +
+      topbar() +
+      budgetCrisisNotice(s) +
+      (s.actionUsed
+        ? nextBanner("本月决策已完成", decisionSummary(s))
+        : decisionBanner("本月管理动作还没选", "进入本月决策页，先选动作，再选进一步选项。")) +
+      '<div class="month-card">' +
+      '<div class="row between">' +
+      '<div><div class="kicker">M' +
+      s.month +
+      " / 6</div><div class=\"h2\">" +
+      esc(
+        s.month === 1
+          ? "规格、架构、算法"
+          : s.month === 2
+          ? "RTL 与验证启动"
+          : s.month === 3
+          ? "RTL 0.75，中端进场"
+          : s.month === 4
+          ? "RTL 0.9，后端进场"
+          : s.month === 5
+          ? "RTL freeze"
+          : "后端迭代与 signoff"
+      ) +
+      "</div></div>" +
+      '<button class="btn ghost small" data-act="glossary">术语</button>' +
+      "</div>" +
+      '<p class="body">' +
+      esc(p.stageHints[s.month - 1]) +
+      "</p>" +
+      '<div class="fine">月薪支出 ' +
+      E.totalSalary(s) +
+      " 万 · 预算结余 " +
+      Math.round(s.budget) +
+      " 万</div>" +
+      gateCards() +
+      "</div>" +
+      decisionEntry(s) +
+      '<div class="section-title">方向团队</div>' +
+      '<div class="track-list">' +
+      active
+        .map(function (d) {
+          return teamGameCard(d);
+        })
+        .join("") +
+      "</div>" +
+      (function () {
+        var inactive = C.directions.filter(function (d) {
+          return d.active.indexOf(s.month) < 0;
+        });
+        if (!inactive.length) return "";
+        return (
+          '<div class="section-title">其他方向</div>' +
+          '<div class="card"><div class="fine">' +
+          inactive
+            .map(function (d) {
+              var team = s.teams[d.id];
+              var done = d.active[d.active.length - 1] < s.month;
+              return esc(d.name) + " · " + esc(team.content.name) + " · " + (done ? "已收尾" : "M" + d.active[0] + " 进场");
+            })
+            .join("<br>") +
+          "</div></div>"
+        );
+      })() +
+      '<div class="sticky-bottom">' +
+      (s.actionUsed
+        ? ""
+        : '<div class="hint center danger-text" style="margin-bottom:8px">本月决策未做</div>') +
+      '<button class="btn primary block ' +
+      (s.actionUsed ? "attention" : "") +
+      '" data-act="start-month" ' +
+      (s.actionUsed ? "" : "disabled") +
+      ">" +
+      (s.actionUsed ? "推进到 M" + s.month + " 月报" : "请先完成本月决策") +
+      "</button>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderDecisionPanel(s) {
+    if (s.actionUsed) {
+      var result = s.lastAction && s.lastAction.result;
+      var resultName = result ? result.action : s.lastAction ? s.lastAction.name : "已完成";
+      var resultTarget = result && result.targetName ? " · " + result.targetName : "";
+      return (
+        '<div class="card decision-done">' +
+        '<div class="row between"><div><div class="kicker">DECISION RESULT</div><div class="h2">' +
+        esc(resultName + resultTarget) +
+        '</div></div><span class="decision-tag done">已完成</span></div>' +
+        effectChips(result) +
+        (result && result.note ? '<div class="warning">' + esc(result.note) + "</div>" : "") +
+        '<p class="fine">本月决策已完成，返回看板后推进到月报。</p>' +
+        "</div>"
+      );
+    }
+
+    var active = E.getActiveDirections(s);
+    var selectedAction = UI.decisionAction;
+
+    function actionRow(a) {
+      var noDv = a.id === "verify" && !active.some(function (d) { return d.id === "dv"; });
+      var disabled = s.budget < a.cost || (a.once && s.flags["used_" + a.id]) || noDv;
+      return (
+        '<button class="decision-option ' +
+        (selectedAction === a.id ? "selected" : "") +
+        '" data-act="pick-action" data-id="' +
+        a.id +
+        '" ' +
+        (disabled ? "disabled" : "") +
+        '>' +
+        '<div><div class="action-name">' +
+        esc(a.name) +
+        (a.id === "skip" ? ' <span class="decision-tag pending">兜底</span>' : "") +
+        '</div><div class="action-meta">' +
+        esc(a.desc) +
+        "</div></div>" +
+        '<span class="decision-option-cost">' +
+        (a.costLabel || (a.cost ? a.cost + " 万" : "0 万")) +
+        "</span></button>"
+      );
+    }
+
+    function directionChip(d) {
+      var selected = UI.decisionDirection === d.id;
+      var tags = s.teams[d.id].content.tags.filter(function (tag) {
+        return ["不加班", "不服管", "跳槽风险", "能加班"].indexOf(tag) >= 0;
+      });
+      var ageHint =
+        UI.decisionAction === "paint"
+          ? " · 平均 " + s.teams[d.id].content.avgYears + " 年"
+          : "";
+      return (
+        '<button class="direction-chip ' +
+        (selected ? "selected" : "") +
+        '" data-act="pick-direction" data-direction="' +
+        d.id +
+        '"><span class="check-box"></span><span><span class="chip-main">' +
+        esc(d.name) +
+        '</span><span class="chip-sub">' +
+        esc(s.teams[d.id].content.name) +
+        ageHint +
+        (tags.length ? " · " + esc(tags.join(" / ")) : "") +
+        "</span></span></button>"
+      );
+    }
+
+    function secondaryFor(a) {
+      if (a.needsTarget) {
+        var selected = UI.decisionDirection;
+        var targetHint =
+          a.id === "paint" ? "（平均 3 年以内 +10，4–5 年 +3，6 年以上 -3）" : "";
+        return (
+          '<div class="decision-subpanel">' +
+          '<div class="decision-subhead">已选动作：' +
+          esc(a.name) +
+          targetHint +
+          "。再选择方向，然后执行。</div>" +
+          '<div class="direction-picker">' +
+          active.map(directionChip).join("") +
+          "</div>" +
+          '<button class="btn primary block" style="margin-top:10px" data-act="inline-action" data-id="' +
+          a.id +
+          '" data-direction="' +
+          (selected || "") +
+          '" ' +
+          (selected ? "" : "disabled") +
+          ">执行</button>" +
+          '<button class="btn ghost small" style="margin-top:8px" data-act="clear-action">换个动作</button>' +
+          "</div>"
+        );
+      }
+      if (a.id === "verify") {
+        var dv = s.teams.dv;
+        var dvTags = dv.content.tags.filter(function (tag) {
+          return ["不加班", "不服管", "跳槽风险", "能加班"].indexOf(tag) >= 0;
+        });
+        return (
+          '<div class="decision-subpanel"><div class="decision-subhead">已选动作：加验证。验证团队：' +
+          esc(dv.content.name) +
+          (dvTags.length ? " · " + esc(dvTags.join(" / ")) : "") +
+          '</div><p class="fine">验证进度 +10，bug -8（受团队 trait 影响）。</p>' +
+          '<button class="btn primary block" data-act="inline-action" data-id="verify">执行</button>' +
+          '<button class="btn ghost small" style="margin-top:8px" data-act="clear-action">换个动作</button></div>'
+        );
+      }
+      return (
+        '<div class="decision-subpanel"><div class="decision-subhead">已选动作：' +
+        esc(a.name) +
+        '</div><p class="fine">' +
+        esc(a.desc) +
+        "</p>" +
+        '<button class="btn primary block" data-act="inline-action" data-id="' +
+        a.id +
+        '">' +
+        (a.id === "skip" ? "确认跳过" : "执行") +
+        "</button>" +
+        '<button class="btn ghost small" style="margin-top:8px" data-act="clear-action">换个动作</button></div>'
+      );
+    }
+
+    var actionList = E.ACTIONS.map(function (a) {
+      return actionRow(a) + (selectedAction === a.id ? secondaryFor(a) : "");
+    }).join("");
+
+    return (
+      '<div class="card decision-panel attention">' +
+      '<div class="row between"><div><div class="mini-title">本月决策</div><div class="body">先选动作，再选这个动作下的方向或确认；不想花钱可以选“什么都不做”。</div></div><span class="decision-tag pending">未完成</span></div>' +
+      '<div class="decision-list">' +
+      actionList +
+      "</div>" +
+      (!selectedAction ? '<div class="decision-hint">先选一个动作，下面才会出现进一步选择。</div>' : "") +
+      "</div>"
+    );
+  }
+
+  function decisionEntry(s) {
+    if (s.actionUsed) {
+      var result = s.lastAction && s.lastAction.result;
+      var resultName = result ? result.action : s.lastAction ? s.lastAction.name : "已完成";
+      var resultTarget = result && result.targetName ? " · " + result.targetName : "";
+      return (
+        '<div class="card decision-entry"><div class="row between"><div><div class="kicker">DECISION RESULT</div><div class="h2">' +
+        esc(resultName + resultTarget) +
+        '</div></div><span class="decision-tag done">已完成</span></div>' +
+        effectChips(result) +
+        (result && result.note ? '<div class="warning">' + esc(result.note) + "</div>" : "") +
+        "</div>"
+      );
+    }
+    return (
+      '<div class="card decision-entry attention"><div class="row between"><div><div class="mini-title">本月决策</div><div class="body">先选动作，再选动作下的方向或确认；全局里可以什么都不做。</div></div>' +
+      '<button class="btn primary small attention" data-act="open-decision">进入本月决策</button></div></div>'
+    );
+  }
+
+  function renderDecisionPage() {
+    var s = UI.game;
+    if (!s) return "";
+    return (
+      '<div class="wrap decision-screen">' +
+      topbar() +
+      budgetCrisisNotice(s) +
+      '<div class="row between" style="margin-bottom:14px"><div><div class="kicker">M' +
+      s.month +
+      ' / 决策</div><div class="h2">本月动作</div></div>' +
+      '<button class="btn ghost small" data-act="back-to-game">返回看板</button></div>' +
+      (s.actionUsed
+        ? nextBanner("决策已完成", "返回看板，推进到 M" + s.month + " 月报。")
+        : decisionBanner("先选动作，再选进一步选项", "全局里可以什么都不做；选完才能推进。")) +
+      renderDecisionPanel(s) +
+      '<button class="btn ' +
+      (s.actionUsed ? "primary" : "ghost") +
+      ' block" style="margin-top:14px" data-act="back-to-game">' +
+      (s.actionUsed ? "返回项目看板，推进月报" : "返回项目看板（未决策）") +
+      "</button>" +
+      "</div>"
+    );
+  }
+
+  function applyAction(actionId, direction) {
+    var r = E.chooseAction(UI.game, actionId, direction || null);
+    if (!r.ok) {
+      toast(r.message);
+      return;
+    }
+    hideModal();
+    UI.forceScrollTop = true;
+    render();
+  }
+
+  function showGlossary() {
+    var terms = [
+      ["RTL", "寄存器传输级。写芯片逻辑的代码，也是后端和验证的输入。"],
+      ["DV", "Design Verification，验证。负责证明设计没有 bug。"],
+      ["DFT", "可测试性设计。让流片后的芯片能被测试机测到。"],
+      ["ECO", "工程变更单。流片前后修 bug 的补丁。"],
+      ["Signoff", "流片前最后一轮检查：时序、功耗、DRC、LVS 等。"],
+      ["Waive", "签字放行。修不动的问题，只能带着风险流片。"],
+      ["Tapeout", "流片。把设计送去代工厂制造。"],
+      ["DRC / LVS", "版图规则检查和版图与电路一致性检查。"],
+      ["MPW", "多项目晶圆。和小伙伴拼一炉流片，省钱但排期紧。"]
+    ];
+    showModal(
+      '<div class="sheet-handle"></div>' +
+        '<div class="sheet-head">' +
+        '<div><div class="h2">术语小抄</div><div class="body">不懂芯片也能玩，但懂一点会更容易识破月报。</div></div>' +
+        '<button class="btn ghost small" data-act="close-modal">关闭</button>' +
+        "</div>" +
+        terms
+          .map(function (t) {
+            return (
+              '<div style="padding:10px 0;border-top:1px solid var(--line)"><div style="font-weight:700">' +
+              esc(t[0]) +
+              '</div><div class="fine" style="margin-top:2px">' +
+              esc(t[1]) +
+              "</div></div>"
+            );
+          })
+          .join("")
+    );
+  }
+
+  function renderReportTeam(t) {
+    return (
+      '<div class="card report-track">' +
+      '<div class="row between">' +
+      '<div class="mini-title">' +
+      esc(directionName(t.direction)) +
+      " · " +
+      esc(t.name) +
+      "</div>" +
+      '<span class="badge">' +
+      esc(t.status) +
+      (t.audit ? " · 已审计" : "") +
+      "</span>" +
+      "</div>" +
+      '<div class="quote"><span class="quote-speaker">' +
+      esc(t.speaker) +
+      "：</span>“" +
+      esc(t.quote) +
+      "”</div>" +
+      '<div class="progress"><div class="progress-fill" style="width:' +
+      Math.round(t.progress) +
+      '%"></div></div>' +
+      (t.details || [])
+        .map(function (d) {
+          return '<div class="detail">' + esc(d) + "</div>";
+        })
+        .join("") +
+      (t.dep ? '<div class="warning">' + esc(t.dep) + "</div>" : "") +
+      '<div class="fine">' +
+      esc(t.teamInfo) +
+      (t.audit && t.trueProgress != null ? " · 审计真实进度 " + Math.round(t.trueProgress) + "%" : "") +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderEvent(e) {
+    if (e.resolved) {
+      return (
+        '<div class="card event-card">' +
+        '<div class="mini-title">' +
+        esc(e.title) +
+        "</div>" +
+        '<p class="body">' +
+        esc(e.text) +
+        "</p>" +
+        '<div class="result">你选择：' +
+        esc(e.chosen) +
+        "。" +
+        esc(e.resultText) +
+        "</div>" +
+        "</div>"
+      );
+    }
+    return (
+      '<div class="card event-card needs-decision">' +
+      '<div class="row between"><div class="mini-title">' +
+      esc(e.title) +
+      '</div><span class="decision-tag pending">需要选择</span></div>' +
+      '<p class="body">' +
+      esc(e.text) +
+      "</p>" +
+      '<div class="event-options">' +
+      e.options
+        .map(function (o, i) {
+          return (
+            '<button class="btn secondary block" data-act="event-option" data-id="' +
+            e.id +
+            '" data-index="' +
+            i +
+            '">' +
+            esc(o.label) +
+            "</button>"
+          );
+        })
+        .join("") +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function renderReport() {
+    var s = UI.game;
+    var r = UI.report;
+    if (!s || !r) return "";
+    var resolved = E.allEventsResolved(s);
+    var unresolved = (r.events || []).filter(function (e) {
+      return !e.resolved;
+    }).length;
+    return (
+      '<div class="wrap report-screen">' +
+      topbar() +
+      budgetCrisisNotice(s) +
+      (unresolved
+        ? decisionBanner("处理本月突发事件", "还剩 " + unresolved + " 件未选择，处理完才能进入下月。")
+        : nextBanner("本月决策已完成", "确认月报后进入下月。")) +
+      '<div class="month-card">' +
+      '<div class="kicker">M' +
+      r.month +
+      " 月报</div>" +
+      '<div class="h2">' +
+      (r.month === 6 ? "最后一个整月" : "项目月报") +
+      "</div>" +
+      '<p class="body">工资支出 ' +
+      r.salary +
+      " 万，当前预算 " +
+      Math.round(s.budget) +
+      " 万。</p>" +
+      (r.notes || [])
+        .map(function (n) {
+          return '<div class="warning">' + esc(n) + "</div>";
+        })
+        .join("") +
+      '<div class="gate-grid">' +
+      '<div class="gate-card"><div class="mini-title">规格 gate</div><div class="gate-value">' +
+      esc(r.gates.specLabel) +
+      "</div></div>" +
+      '<div class="gate-card"><div class="mini-title">Signoff gate</div><div class="gate-value">' +
+      esc(r.gates.signoffLabel) +
+      "</div></div>" +
+      "</div>" +
+      '<div class="milestone-list">' +
+      (r.milestones || [])
+        .map(function (m) {
+          return (
+            '<div class="milestone"><span class="milestone-dot ' +
+            (m.ok ? "" : "bad") +
+            '"></span><span>' +
+            esc(m.text) +
+            "</span></div>"
+          );
+        })
+        .join("") +
+      "</div>" +
+      "</div>" +
+      '<div class="section-title">方向团队汇报</div>' +
+      (r.directions || []).map(renderReportTeam).join("") +
+      (r.events && r.events.length
+        ? '<div class="section-title">本月突发（' + r.events.length + "）</div>" + r.events.map(renderEvent).join("")
+        : "") +
+      '<div class="sticky-bottom">' +
+      (resolved
+        ? '<button class="btn primary block attention" data-act="advance">' +
+          (r.month === 6 ? "进入 Signoff" : "进入 M" + (r.month + 1)) +
+          "</button>"
+        : '<div class="hint center">先处理完突发事件，再进入下月。</div>') +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function waiverCard(w) {
+    var s = UI.game;
+    var canFix = !w.fixed;
+    return (
+      '<div class="card waiver-card ' +
+      (w.fixed ? "fixed" : w.waived ? "waived" : "needs-decision") +
+      '">' +
+      '<div class="row between">' +
+      '<div class="mini-title">' +
+      esc(w.category) +
+      "</div>" +
+      (w.fixed
+        ? '<span class="badge ok">已修复</span>'
+        : w.waived
+        ? '<span class="badge bad">Waive</span>'
+        : '<span class="decision-tag pending">待决定</span>') +
+      "</div>" +
+      '<p class="body" style="font-weight:700">' +
+      esc(w.label) +
+      "</p>" +
+      '<p class="fine">' +
+      esc(w.hint) +
+      "</p>" +
+      '<div class="row between" style="margin-top:10px">' +
+      '<div class="fine" style="margin:0">修复：' +
+      w.fixCost +
+      " 万 / " +
+      w.fixWeeks +
+      " 周</div>" +
+      '<div class="btn-group">' +
+      '<button class="btn small ' +
+      (w.fixed ? "primary" : "secondary") +
+      '" data-act="waiver-fix" data-id="' +
+      w.id +
+      '" ' +
+      (canFix || w.fixed ? "" : "disabled") +
+      ">" +
+      (w.fixed ? "已修复" : s.budget < w.fixCost ? "修复（透支）" : "修复") +
+      "</button>" +
+      '<button class="btn small ' +
+      (w.waived ? "danger" : "secondary") +
+      '" data-act="waiver-waive" data-id="' +
+      w.id +
+      '">Waive</button>' +
+      "</div>" +
+      "</div>" +
+      (s.budget < w.fixCost && !w.fixed ? '<div class="warning">预算不足，修复会透支预算。</div>' : "") +
+      "</div>"
+    );
+  }
+
+  function renderWaiver() {
+    var s = UI.game;
+    if (!s) return "";
+    var fixCost = s.waivers.reduce(function (sum, w) {
+      return sum + (w.fixed ? w.fixCost : 0);
+    }, 0);
+    var decided = s.waivers.filter(function (w) {
+      return w.fixed || w.waived;
+    }).length;
+    var undecided = s.waivers.length - decided;
+    var fixedCount = s.waivers.filter(function (w) {
+      return w.fixed;
+    }).length;
+    return (
+      '<div class="wrap waiver-screen">' +
+      topbar() +
+      budgetCrisisNotice(s) +
+      (undecided > 0
+        ? decisionBanner("逐项决定修复或 Waive", "修得越多，预算、窗口和新增的集成/ECO 失败风险越大。")
+        : nextBanner("所有项已决定", "确认流片，进入最终评估。")) +
+      '<div class="month-card">' +
+      '<div class="kicker">M6 / SIGNOFF</div>' +
+      '<div class="h2">流片前最后一张表</div>' +
+      '<p class="body">可以修多项，但每修一项都要花预算、顺延窗口，并引入额外的集成/ECO 失败风险。修得越多，流片越晚，风险越高；预算不足也可以修，但会透支，成本评分和失败风险都会变差。</p>' +
+      '<div class="stats-row" style="grid-template-columns:repeat(4,1fr)">' +
+      '<div class="stat"><div class="stat-label">预算</div><div class="stat-value">' +
+      Math.round(s.budget) +
+      " 万</div></div>" +
+      '<div class="stat"><div class="stat-label">修复花费</div><div class="stat-value">' +
+      fixCost +
+      " 万</div></div>" +
+      '<div class="stat"><div class="stat-label">预计延迟</div><div class="stat-value">' +
+      s.delayWeeks +
+      " 周</div></div>" +
+      '<div class="stat"><div class="stat-label">已修复</div><div class="stat-value">' +
+      fixedCount +
+      " 项</div></div>" +
+      "</div>" +
+      (s.delayWeeks > 0
+        ? '<div class="warning">流片窗口顺延 ' +
+          s.delayWeeks +
+          " 周。超过 4 周，市场窗口可能保不住。</div>"
+        : "") +
+      '<div class="row between" style="margin-top:12px">' +
+      '<div class="fine" style="margin:0">已决定 ' +
+      decided +
+      " / " +
+      s.waivers.length +
+      " 项 · 已修复 " +
+      fixedCount +
+      " 项</div>" +
+      '<button class="btn ghost small" data-act="waive-all">' +
+      (UI.confirmWaiveAll ? "再点一次确认全部 Waive" : "全部 Waive") +
+      "</button>" +
+      "</div>" +
+      "</div>" +
+      '<div class="section-title">Signoff 违规项</div>' +
+      s.waivers.map(waiverCard).join("") +
+      '<div class="sticky-bottom">' +
+      (UI.confirmSubmit
+        ? '<div class="hint center" style="margin-bottom:8px">未决定项将默认 Waive</div>'
+        : "") +
+      '<button class="btn primary block ' +
+      (undecided === 0 || UI.confirmSubmit ? "attention" : "") +
+      '" data-act="submit-waivers">' +
+      (UI.confirmSubmit ? "再点一次确认流片" : "确认流片") +
+      "</button>" +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function worksLabel(e) {
+    if (e.works) return "点亮";
+    return e.condition === "partial" ? "部分无响应" : "不亮";
+  }
+
+  function functionLabel(e) {
+    if (e.works) return "点亮";
+    return e.condition === "partial" ? "部分" : "失败";
+  }
+
+  function severeLabel(e) {
+    if (e.severe === "none") return "无";
+    if (e.severe === "minor") return "少量 errata";
+    if (e.severe === "major") return "严重 errata";
+    return "致命";
+  }
+
+  function truthTeamCard(t) {
+    return (
+      '<div class="card truth-team">' +
+      '<div class="row between">' +
+      '<div class="name">' +
+      esc(t.name) +
+      "</div>" +
+      '<span class="badge">' +
+      esc(t.directionName) +
+      "</span>" +
+      "</div>" +
+      '<div class="fine">' +
+      t.headcount +
+      " 人 · 月薪 " +
+      t.salary +
+      " 万 · 平均 " +
+      t.avgYears +
+      " 年 · " +
+      esc(levelsLabel(t.levels)) +
+      "</div>" +
+      '<div class="truth-grid">' +
+      '<div class="truth-stat">真实战力<b>' +
+      t.hidden.skill +
+      "</b></div>" +
+      '<div class="truth-stat">质量<b>' +
+      t.hidden.quality +
+      "</b></div>" +
+      '<div class="truth-stat">速度<b>' +
+      t.hidden.speed +
+      "</b></div>" +
+      '<div class="truth-stat">协作<b>' +
+      t.hidden.collab +
+      "</b></div>" +
+      '<div class="truth-stat">稳定<b>' +
+      t.hidden.stability +
+      "</b></div>" +
+      '<div class="truth-stat">偏差<b>' +
+      (t.hidden.bias > 0 ? "+" : "") +
+      t.hidden.bias +
+      "</b></div>" +
+      "</div>" +
+      '<div class="fine">隐藏标签：' +
+      esc(t.hidden.traits.join("、") || "无") +
+      " · 项目 fit " +
+      t.fit +
+      "</div>" +
+      "</div>"
+    );
+  }
+
+  function riskClass(r) {
+    if (r >= 0.6) return "risk-high";
+    if (r >= 0.4) return "risk-mid";
+    return "risk-low";
+  }
+
+  function budgetResultCard(e) {
+    if (!e.overspendPct || e.overspendPct <= 0) return "";
+    var title = e.cashCrash ? "资金链断裂" : "预算超支";
+    var canWait = e.works && e.severe !== "fatal";
+    var lines = [];
+    if (e.cashCrash) {
+      lines.push(
+        "等待量产期间资金链断裂：超支 " +
+          e.overspendPct +
+          "%，触发概率 " +
+          Math.round((e.pCashCrash || 0) * 100) +
+          "%，实际触发。"
+      );
+      lines.push("评级 D，总分封顶 49。");
+    } else if (e.overspendPct > 20 && canWait) {
+      lines.push(
+        "超支 " +
+          e.overspendPct +
+          "%，等待量产未触发资金链断裂（概率 " +
+          Math.round((e.pCashCrash || 0) * 100) +
+          "%）。"
+      );
+      lines.push("评级已降 1 级，最终 " + e.grade + "。");
+    } else if (e.overspendPct > 20) {
+      lines.push("超支 " + e.overspendPct + "%，本次未进入量产等待阶段，未做资金链断裂判定。");
+      lines.push("评级已降 1 级，最终 " + e.grade + "。");
+    } else {
+      lines.push("超支 " + e.overspendPct + "%，未进入资金链断裂判定。");
+      lines.push("评级已降 1 级，最终 " + e.grade + "。");
+    }
+    return (
+      '<div class="card budget-result' +
+      (e.cashCrash ? " danger" : "") +
+      '"><div class="mini-title">' +
+      title +
+      '</div><p class="body">' +
+      esc(lines.join(" ")) +
+      '</p><div class="fine">现有超支惩罚已同时作用于点亮、严重 errata 和量产概率。</div></div>'
+    );
+  }
+
+  function renderResult() {
+    var s = UI.game;
+    if (!s || !s.evaluation) return "";
+    var e = s.evaluation;
+    var truth = E.getTruth(s);
+    var teamNames = truth.teams.map(function (t) {
+      return t.name;
+    }).join("、");
+    return (
+      '<div class="wrap result-screen">' +
+      nextBanner("本局结束", "先看真相复盘，再保存分享卡或再来一局。") +
+      '<div class="result-hero grade-' +
+      e.grade +
+      '">' +
+      '<div class="kicker">TAPEOUT RESULT</div>' +
+      '<div class="grade">' +
+      e.grade +
+      "</div>" +
+      '<div class="ending-title">' +
+      esc(e.ending.title) +
+      "</div>" +
+      '<div class="ending-sub">' +
+      esc(e.ending.subtitle) +
+      "</div>" +
+      '<div class="score">' +
+      e.score +
+      " / 100 · 项目名 " +
+      esc(s.seed) +
+      "</div>" +
+      '<p class="ending-body">' +
+      esc(e.ending.body) +
+      "</p>" +
+      "</div>" +
+      '<div class="check-grid">' +
+      '<div class="check ' +
+      (e.works ? "ok" : "bad") +
+      '"><div class="check-label">BRING-UP</div><div class="check-value">' +
+      worksLabel(e) +
+      "</div></div>" +
+      '<div class="check ' +
+      (e.severe === "none" ? "ok" : "bad") +
+      '"><div class="check-label">ERRATA</div><div class="check-value">' +
+      severeLabel(e) +
+      "</div></div>" +
+      '<div class="check ' +
+      (e.mp ? "ok" : "bad") +
+      '"><div class="check-label">量产</div><div class="check-value">' +
+      (e.cashCrash ? "资金链断裂" : e.mp ? "可量产" : "不可量产") +
+      "</div></div>" +
+      "</div>" +
+      budgetResultCard(e) +
+      '<div class="metric-grid">' +
+      '<div class="metric"><div class="metric-label">功能</div><div class="metric-value">' +
+      functionLabel(e) +
+      " · 覆盖 " +
+      e.coverage +
+      '%</div></div>' +
+      '<div class="metric"><div class="metric-label">市场</div><div class="metric-value">' +
+      e.market +
+      " / 100</div></div>" +
+      '<div class="metric"><div class="metric-label">成本</div><div class="metric-value ' +
+      (e.budgetRemaining < 0 ? "danger-text" : "") +
+      '">结余 ' +
+      Math.round(e.budgetRemaining) +
+      " 万</div></div>" +
+      '<div class="metric"><div class="metric-label">Tapeout</div><div class="metric-value">' +
+      (e.onTime ? "准时" : "延迟 " + e.delayWeeks + " 周") +
+      "</div></div>" +
+      "</div>" +
+      (function () {
+        var fixedList = e.fixed || [];
+        var topWaived = e.waived.slice().sort(function (a, b) {
+          return b.trueRisk - a.trueRisk;
+        })[0];
+        var choice = fixedList.length
+          ? "你修复了 " +
+            fixedList.length +
+            " 项（花费 " +
+            Math.round(e.fixCost || 0) +
+            " 万，窗口顺延 " +
+            e.delayWeeks +
+            " 周）：" +
+            fixedList
+              .map(function (w) {
+                return "「" + w.label + "」";
+              })
+              .join("、") +
+            "。修复本身新增 " +
+            Math.round((e.fixRisk || 0) * 100) +
+            "% 的 ECO/集成风险。"
+          : "你没有修复，全部 Waive。";
+        if (topWaived) {
+          choice += "「" + topWaived.label + "」被 Waive（真实风险 " + Math.round(topWaived.trueRisk * 100) + "%）。";
+        }
+        choice += "这次流片的 Bring-up / Errata / 量产结果直接受这个选择影响。";
+        return '<div class="card signoff-choice"><div class="mini-title">关键 Signoff 取舍</div><p class="body">' + esc(choice) + "</p></div>";
+      })() +
+      '<div class="section-title">真相复盘 · 团队</div>' +
+      truth.teams.map(truthTeamCard).join("") +
+      '<div class="card">' +
+      '<div class="mini-title">Waive 的真实风险</div>' +
+      '<div style="margin-top:8px">' +
+      truth.waivers
+        .map(function (w) {
+          return (
+            '<div class="row between" style="padding:7px 0;border-bottom:1px solid rgba(42,53,68,.55)">' +
+            '<div class="fine" style="margin:0;max-width:74%">' +
+            esc(w.label) +
+            " · " +
+            (w.fixed ? "已修复" : "已 Waive") +
+            "</div>" +
+            '<div class="' +
+            riskClass(w.trueRisk) +
+            '" style="font-size:12px;font-weight:700">' +
+            Math.round(w.trueRisk * 100) +
+            "%</div>" +
+            "</div>"
+          );
+        })
+        .join("") +
+      "</div>" +
+      '<div class="mini-title" style="margin-top:16px">项目隐藏需求</div>' +
+      '<p class="body">' +
+      esc(truth.project.hidden) +
+      "</p>" +
+      '<div class="mini-title" style="margin-top:16px">关键日志</div>' +
+      '<ul class="log">' +
+      truth.log
+        .slice(-12)
+        .map(function (l) {
+          return "<li>" + esc(l) + "</li>";
+        })
+        .join("") +
+      "</ul>" +
+      "</div>" +
+      '<button class="btn primary block" data-act="share-image">生成分享卡 / 保存 / 发布</button>' +
+      '<div style="height:8px"></div>' +
+      '<button class="btn ghost block" data-act="restart">再来一局</button>' +
+      '<p class="fine center" style="margin-top:14px">团队：' +
+      esc(teamNames) +
+      " · 项目名 " +
+      esc(s.seed) +
+      "</p>" +
+      "</div>"
+    );
+  }
+
+  function render() {
+    var scrollY = window.scrollY;
+    var forceTop = UI.forceScrollTop;
+    UI.forceScrollTop = false;
+    var same = UI.lastRenderScreen === UI.screen;
+    UI.lastRenderScreen = UI.screen;
+    var html = "";
+    if (UI.screen === "title") html = renderTitle();
+    else if (UI.screen === "team") html = renderTeamSelect();
+    else if (UI.screen === "game") html = renderGame();
+    else if (UI.screen === "decision") html = renderDecisionPage();
+    else if (UI.screen === "report") html = renderReport();
+    else if (UI.screen === "waiver") html = renderWaiver();
+    else if (UI.screen === "result") html = renderResult();
+    app.innerHTML = html;
+    if (same && !forceTop) window.scrollTo(0, scrollY);
+    else window.scrollTo(0, 0);
+  }
+
+  function shareTextContent() {
+    var s = UI.game;
+    var e = s.evaluation;
+    return (
+      "我在《流片吧，PM》里把一颗通信 SoC 送到流片。\n" +
+      "结局：" +
+      e.ending.title +
+      "（" +
+      e.grade +
+      "），评分 " +
+      e.score +
+      "/100。\n" +
+      "芯片：" +
+      worksLabel(e) +
+      "；Errata：" +
+      severeLabel(e) +
+      "；量产：" +
+      (e.cashCrash ? "资金链断裂" : e.mp ? "可量产" : "不可量产") +
+      "。\n" +
+      "项目名：" +
+      s.seed +
+      "。6 个月，六个团队，一颗芯片。"
+    );
+  }
+
+  function platformError(err) {
+    return (err && (err.errMsg || err.message)) || "操作失败，请稍后重试";
+  }
+
+  function saveShareImage() {
+    if (!UI.shareImageDataUrl) return;
+    if (!global.MiniPlatform || !global.MiniPlatform.canSave()) {
+      toast("当前环境不支持保存到相册");
+      return;
+    }
+    toast("正在保存到相册...");
+    global.MiniPlatform.saveImage(UI.shareImageDataUrl).then(
+      function () {
+        toast("已保存到相册");
+      },
+      function (err) {
+        toast(platformError(err));
+      }
+    );
+  }
+
+  function postShareNote() {
+    if (!UI.shareImageDataUrl) return;
+    if (!global.MiniPlatform || !global.MiniPlatform.canPost()) {
+      toast("当前环境不支持发布笔记");
+      return;
+    }
+    var e = UI.game.evaluation;
+    global.MiniPlatform.postNote(UI.shareImageDataUrl, {
+      title: "流片吧，PM · " + e.ending.title,
+      content: shareTextContent()
+    }).then(
+      function () {
+        toast("已打开发布页，请确认后发布");
+      },
+      function (err) {
+        toast(platformError(err));
+      }
+    );
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines) {
+    var chars = String(text).split("");
+    var line = "";
+    var lines = [];
+    for (var i = 0; i < chars.length; i++) {
+      var test = line + chars[i];
+      if (ctx.measureText(test).width > maxWidth && line) {
+        lines.push(line);
+        line = chars[i];
+        if (maxLines && lines.length >= maxLines) break;
+      } else {
+        line = test;
+      }
+    }
+    if (line && (!maxLines || lines.length < maxLines)) lines.push(line);
+    lines.forEach(function (l, idx) {
+      ctx.fillText(l, x, y + idx * lineHeight);
+    });
+  }
+
+  function shareImage() {
+    var s = UI.game;
+    var e = s.evaluation;
+    var teamNames = C.directions
+      .map(function (d) {
+        return s.teams[d.id].content.name;
+      })
+      .join("、");
+    var canvas = document.createElement("canvas");
+    canvas.width = 1080;
+    canvas.height = 1440;
+    var ctx = canvas.getContext("2d");
+    var font = '-apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif';
+
+    ctx.fillStyle = "#f7f2e7";
+    ctx.fillRect(0, 0, 1080, 1440);
+    ctx.fillStyle = "#fffdf9";
+    roundRect(ctx, 56, 56, 968, 1328, 36);
+    ctx.fill();
+    ctx.strokeStyle = "#d9cebb";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    ctx.save();
+    ctx.globalAlpha = 0.035;
+    ctx.fillStyle = "#5c430f";
+    ctx.font = "800 220px " + font;
+    ctx.textAlign = "center";
+    ctx.translate(540, 760);
+    ctx.rotate(-0.32);
+    ctx.fillText("一维空间", 0, 0);
+    ctx.restore();
+
+    ctx.fillStyle = "#9a6a00";
+    ctx.font = "700 26px " + font;
+    ctx.fillText("TAPEOUT RESULT", 104, 142);
+
+    ctx.fillStyle = "#6b7069";
+    ctx.font = "400 26px " + font;
+    ctx.fillText("流片吧，PM · 项目名 " + s.seed, 104, 186);
+
+    ctx.fillStyle = e.grade === "D" ? "#bd3b32" : "#9a6a00";
+    ctx.font = "800 170px " + font;
+    ctx.textAlign = "right";
+    ctx.fillText(e.grade, 960, 280);
+    ctx.textAlign = "left";
+
+    ctx.fillStyle = "#20262e";
+    ctx.font = "800 82px " + font;
+    wrapCanvasText(ctx, e.ending.title, 104, 330, 760, 92, 2);
+
+    ctx.fillStyle = "#6b7069";
+    ctx.font = "400 30px " + font;
+    wrapCanvasText(ctx, e.ending.subtitle, 104, 500, 820, 42, 2);
+
+    var checks = [
+      ["BRING-UP", worksLabel(e), e.works],
+      ["ERRATA", severeLabel(e), e.severe === "none"],
+      ["量产", e.cashCrash ? "资金链断裂" : e.mp ? "可量产" : "不可量产", e.mp]
+    ];
+    checks.forEach(function (c, i) {
+      var x = 104 + i * 296;
+      ctx.fillStyle = "#f3ecdf";
+      roundRect(ctx, x, 576, 264, 132, 18);
+      ctx.fill();
+      ctx.strokeStyle = c[2] ? "rgba(63,185,80,.45)" : "rgba(248,81,73,.45)";
+      ctx.stroke();
+      ctx.fillStyle = "#6b7069";
+      ctx.font = "600 20px " + font;
+      ctx.fillText(c[0], x + 22, 616);
+      ctx.fillStyle = c[2] ? "#2e7d3e" : "#bd3b32";
+      ctx.font = "700 30px " + font;
+      ctx.fillText(c[1], x + 22, 668);
+    });
+
+    ctx.fillStyle = "#20262e";
+    ctx.font = "700 34px " + font;
+    ctx.fillText("功能 " + functionLabel(e) + "  ·  覆盖 " + e.coverage + "%", 104, 792);
+    ctx.fillText(
+      "市场 " +
+        e.market +
+        " / 100  ·  成本结余 " +
+        Math.round(e.budgetRemaining) +
+        " 万" +
+        (e.overspendPct ? "  ·  超支 " + e.overspendPct + "%" : ""),
+      104,
+      846
+    );
+    ctx.fillText("Tapeout " + (e.onTime ? "准时" : "延迟 " + e.delayWeeks + " 周") + "  ·  得分 " + e.score, 104, 900);
+
+    ctx.fillStyle = "#6b7069";
+    ctx.font = "600 22px " + font;
+    ctx.fillText("方向团队", 104, 980);
+    ctx.fillStyle = "#20262e";
+    ctx.font = "700 30px " + font;
+    wrapCanvasText(ctx, teamNames, 104, 1026, 820, 42, 3);
+
+    ctx.fillStyle = "#6b7069";
+    ctx.font = "400 24px " + font;
+    wrapCanvasText(ctx, "“" + e.ending.body + "”", 104, 1150, 840, 38, 4);
+
+    ctx.fillStyle = "#9a6a00";
+    ctx.font = "700 24px " + font;
+    ctx.fillText("6 个月，六个团队，一颗芯片。", 104, 1330);
+
+    var dataUrl = canvas.toDataURL("image/png");
+    UI.shareImageDataUrl = dataUrl;
+    var canSave = global.MiniPlatform && global.MiniPlatform.canSave();
+    var canPost = global.MiniPlatform && global.MiniPlatform.canPost();
+    showModal(
+      '<div class="sheet-handle"></div>' +
+        '<div class="sheet-head">' +
+        '<div><div class="h2">分享卡</div><div class="body">保存到相册，或带上战绩发布小红书笔记。</div></div>' +
+        '<button class="btn ghost small" data-act="close-modal">关闭</button>' +
+        "</div>" +
+        '<img src="' +
+        dataUrl +
+        '" alt="share card" style="width:100%;border-radius:14px;border:1px solid var(--line)">' +
+        (canSave
+          ? '<button class="btn primary block" style="margin-top:12px" data-act="save-share-image">保存到相册</button>'
+          : "") +
+        (canPost
+          ? '<button class="btn secondary block" style="margin-top:8px" data-act="post-share-note">发布到小红书</button>'
+          : "") +
+        (!canSave && !canPost
+          ? '<div class="warning">当前环境未注入小红书端能力，无法保存或发布；请在小红书 App 内打开。</div>'
+          : "")
+    );
+  }
+
+  function startGame() {
+    var game = E.createRun({
+      seed: UI.seed,
+      projectId: UI.projectId,
+      teamIds: selectedTeamIds(),
+      backgroundCheckCost: UI.backgroundCost,
+      backgroundChecks: Object.keys(UI.checkedTeams)
+    });
+    if (game.ok === false) {
+      toast(game.message);
+      return;
+    }
+    UI.game = game;
+    UI.report = null;
+    UI.decisionAction = null;
+    UI.decisionDirection = null;
+    UI.confirmWaiveAll = false;
+    UI.confirmSubmit = false;
+    UI.screen = "game";
+    render();
+  }
+
+  document.addEventListener("click", function (ev) {
+    var el = ev.target.closest("[data-act]");
+    if (!el) return;
+    var act = el.getAttribute("data-act");
+    var id = el.getAttribute("data-id");
+    var direction = el.getAttribute("data-direction");
+    var index = el.getAttribute("data-index");
+
+    if (act === "start") {
+      var input = document.getElementById("seedInput");
+      UI.seed = (input && input.value.trim()) || randomProjectName();
+      UI.selectedTeams = {};
+      UI.checkedTeams = {};
+      UI.backgroundCost = 0;
+      UI.decisionAction = null;
+      UI.decisionDirection = null;
+      UI.screen = "team";
+      render();
+    } else if (act === "back-title") {
+      UI.screen = "title";
+      render();
+    } else if (act === "toggle-team") {
+      var team = teamById(id);
+      if (!team) return;
+      if (UI.selectedTeams[team.direction] === team.id) {
+        delete UI.selectedTeams[team.direction];
+      } else if (!UI.selectedTeams[team.direction]) {
+        UI.selectedTeams[team.direction] = team.id;
+      }
+      render();
+    } else if (act === "background-team") {
+      if (Object.prototype.hasOwnProperty.call(UI.checkedTeams, id)) {
+        toast("这个团队已经背调过了。");
+        return;
+      }
+      var team = teamById(id);
+      if (!team) return;
+      var clueRng = RNG.mulberry32(RNG.hashSeed(UI.seed + ":team:" + id));
+      UI.checkedTeams[id] = Math.floor(clueRng() * team.clues.length);
+      UI.backgroundCost += 15;
+      render();
+    } else if (act === "team-detail") {
+      showTeamDetail(id);
+    } else if (act === "start-game") {
+      if (selectedDirectionCount() !== C.directions.length) {
+        toast("先把 6 个方向选齐。");
+        return;
+      }
+      startGame();
+    } else if (act === "open-decision") {
+      if (!UI.game) return;
+      UI.screen = "decision";
+      render();
+    } else if (act === "back-to-game") {
+      UI.screen = "game";
+      render();
+    } else if (act === "pick-action") {
+      UI.decisionAction = UI.decisionAction === id ? null : id;
+      UI.decisionDirection = null;
+      render();
+    } else if (act === "clear-action") {
+      UI.decisionAction = null;
+      UI.decisionDirection = null;
+      render();
+    } else if (act === "pick-direction") {
+      UI.decisionDirection = UI.decisionDirection === direction ? null : direction;
+      render();
+    } else if (act === "inline-action") {
+      var action = E.ACTIONS.find(function (a) {
+        return a.id === id;
+      });
+      if (!action) return;
+      var target = null;
+      if (action.needsTarget) {
+        target = direction || (UI.decisionDirection && UI.decisionDirection !== "global" ? UI.decisionDirection : "");
+        if (!target || target === "global") {
+          toast("请先勾选一个方向");
+          return;
+        }
+      }
+      applyAction(id, target);
+    } else if (act === "start-month") {
+      if (!UI.game) return;
+      if (!UI.game.actionUsed) {
+        toast("请先完成本月决策");
+        return;
+      }
+      var report = E.resolveMonth(UI.game);
+      if (report && report.ok === false) {
+        toast(report.message);
+        return;
+      }
+      UI.report = report;
+      UI.decisionAction = null;
+      UI.decisionDirection = null;
+      UI.screen = "report";
+      render();
+    } else if (act === "event-option") {
+      if (!UI.game) return;
+      var res = E.resolveEvent(UI.game, id, parseInt(index, 10));
+      if (!res.ok) {
+        toast(res.message);
+        return;
+      }
+      render();
+    } else if (act === "advance") {
+      if (!UI.game) return;
+      var adv = E.advanceMonth(UI.game);
+      if (!adv.ok) {
+        toast(adv.message);
+        return;
+      }
+      UI.decisionAction = null;
+      UI.decisionDirection = null;
+      UI.confirmWaiveAll = false;
+      UI.confirmSubmit = false;
+      if (adv.phase === "waiver") {
+        UI.screen = "waiver";
+      } else {
+        UI.screen = "game";
+      }
+      render();
+    } else if (act === "waiver-fix" || act === "waiver-waive") {
+      if (!UI.game) return;
+      UI.confirmWaiveAll = false;
+      UI.confirmSubmit = false;
+      var decision = act === "waiver-fix" ? "fix" : "waive";
+      var wr = E.setWaiver(UI.game, id, decision);
+      if (!wr.ok) {
+        toast(wr.message);
+        return;
+      }
+      render();
+    } else if (act === "waive-all") {
+      if (!UI.game) return;
+      if (!UI.confirmWaiveAll) {
+        UI.confirmWaiveAll = true;
+        UI.confirmSubmit = false;
+        render();
+        return;
+      }
+      UI.game.waivers.forEach(function (w) {
+        E.setWaiver(UI.game, w.id, "waive");
+      });
+      UI.confirmWaiveAll = false;
+      render();
+    } else if (act === "submit-waivers") {
+      if (!UI.game) return;
+      var undecided = UI.game.waivers.filter(function (w) {
+        return !w.fixed && !w.waived;
+      }).length;
+      if (undecided > 0 && !UI.confirmSubmit) {
+        UI.confirmSubmit = true;
+        UI.confirmWaiveAll = false;
+        render();
+        return;
+      }
+      var ev = E.submitWaivers(UI.game);
+      if (ev && ev.ok === false) {
+        toast(ev.message);
+        return;
+      }
+      UI.confirmSubmit = false;
+      UI.screen = "result";
+      render();
+    } else if (act === "glossary") {
+      showGlossary();
+    } else if (act === "close-modal") {
+      hideModal();
+    } else if (act === "share-image") {
+      shareImage();
+    } else if (act === "save-share-image") {
+      saveShareImage();
+    } else if (act === "post-share-note") {
+      postShareNote();
+    } else if (act === "restart") {
+      UI.screen = "title";
+      UI.game = null;
+      UI.report = null;
+      UI.selectedTeams = {};
+      UI.checkedTeams = {};
+      UI.backgroundCost = 0;
+      UI.shareImageDataUrl = null;
+      UI.decisionAction = null;
+      UI.decisionDirection = null;
+      UI.seed = "";
+      hideModal();
+      render();
+    }
+  });
+
+  modalRoot.addEventListener("click", function (ev) {
+    if (ev.target.classList.contains("sheet-backdrop")) {
+      hideModal();
+    }
+  });
+
+  global.GameUI = {
+    state: UI,
+    render: render,
+    showModal: showModal,
+    hideModal: hideModal
+  };
+
+  render();
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+</body>
+</html>

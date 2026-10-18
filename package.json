@@ -1,0 +1,13 @@
+{
+  "name": "tapeout-pm",
+  "version": "0.2.0",
+  "private": true,
+  "description": "流片吧，PM — 离线芯片项目管理文字游戏",
+  "scripts": {
+    "sim": "node tools/sim.js 500",
+    "teamscan": "node tools/teamscan.js 100",
+    "build": "node tools/build.js",
+    "build:minitool": "python tools/build-minitool.py",
+    "e2e": "node tools/e2e.js"
+  }
+}
