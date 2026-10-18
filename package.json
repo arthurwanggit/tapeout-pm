@@ -1,6 +1,6 @@
 {
   "name": "tapeout-pm",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "流片吧，PM — 离线芯片项目管理文字游戏",
   "scripts": {
