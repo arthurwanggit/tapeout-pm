@@ -14,7 +14,7 @@
 | ![](screenshots/game.png) | ![](screenshots/decision.png) |
 | ![](screenshots/decision-target.png) | ![](screenshots/decision-result.png) |
 | ![](screenshots/background.png) | ![](screenshots/waiver.png) |
-| ![](screenshots/result.png) | ![](screenshots/share.png) |
+| ![](screenshots/result.png) | ![](screenshots/team-detail.png) |
 
 ## 直接玩
 
