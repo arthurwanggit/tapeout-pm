@@ -270,7 +270,7 @@
       return a.id === actionId;
     });
     if (!action) return { ok: false, message: "没有这个决策。" };
-    if (state.budget < action.cost) return { ok: false, message: "预算不够。" };
+    if (action.cost > 0 && state.budget < action.cost) return { ok: false, message: "预算不够。" };
     if (action.once && state.flags["used_" + action.id]) return { ok: false, message: "这个决策已经用过了。" };
     if (action.id === "verify" && !isDirectionActive(state, "dv")) return { ok: false, message: "验证还没进场。" };
     if (action.needsTarget) {

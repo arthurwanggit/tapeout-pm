@@ -655,7 +655,7 @@
 
     function actionRow(a) {
       var noDv = a.id === "verify" && !active.some(function (d) { return d.id === "dv"; });
-      var disabled = s.budget < a.cost || (a.once && s.flags["used_" + a.id]) || noDv;
+      var disabled = (a.cost > 0 && s.budget < a.cost) || (a.once && s.flags["used_" + a.id]) || noDv;
       return (
         '<button class="decision-option ' +
         (selectedAction === a.id ? "selected" : "") +

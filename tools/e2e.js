@@ -167,6 +167,10 @@ async function main() {
       }
       if (month === 2) await shot("shot-game-m2.png");
       if (month === 4) await shot("shot-game-m4.png");
+      if (month === 5) {
+        await evaluate(`window.GameUI.state.game.budget = -50; window.GameUI.render(); true`);
+        await sleep(120);
+      }
       if (month > 1) {
         await evaluate(`document.querySelector('[data-act="open-decision"]').click(); true`);
         await sleep(120);
